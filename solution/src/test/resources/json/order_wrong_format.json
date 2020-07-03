@@ -1,0 +1,12 @@
+{
+  "partnerid": 1,
+  "items": [{
+    "code": 123,
+    "amount": 120
+  },
+    {
+      "code": 123,
+      "amount": 120
+    }
+  ]
+}

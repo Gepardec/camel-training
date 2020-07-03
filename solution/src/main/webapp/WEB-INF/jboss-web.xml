@@ -1,0 +1,4 @@
+<jboss-web>
+    <context-root>/best</context-root>
+</jboss-web>
+
