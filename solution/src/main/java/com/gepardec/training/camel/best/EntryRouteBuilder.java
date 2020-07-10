@@ -18,7 +18,7 @@ public final class EntryRouteBuilder extends RouteBuilder {
 
         restConfiguration().component("servlet").bindingMode(RestBindingMode.json)
                 // and output using pretty print
-                .dataFormatProperty("prettyPrint", "true")
+                .dataFormatProperty("prettyPrint", "true");
                 // setup context path and port number that Apache Tomcat will deploy
                 // this application with, as we use the servlet component, then we
                 // need to aid Camel to tell it these details so Camel knows the url
@@ -26,7 +26,7 @@ public final class EntryRouteBuilder extends RouteBuilder {
                 // Notice: This is optional, but needed if the RestRegistry should
                 // enlist accurate information. You can access the RestRegistry
                 // from JMX at runtime
-                .contextPath("best/rest").port(8080);
+                //.contextPath("/").port(8080);
 
         rest("/best/").post().to(Endpoints.ENTRY_DIRECT_ENDPOINT.endpointUri());
 
