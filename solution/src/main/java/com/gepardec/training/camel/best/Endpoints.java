@@ -5,4 +5,8 @@ import com.gepardec.training.camel.commons.endpoint.CamelEndpoint;
 public final class Endpoints {
     public static final CamelEndpoint ENTRY_DIRECT_ENDPOINT = new CamelEndpoint("direct:best_entry", "best_entry");
     public static final CamelEndpoint SPLITTER_ENTRY_SEDA_ENDPOINT = new CamelEndpoint("seda:best_splitter_entry", "best_splitter_entry");
+    public static final CamelEndpoint EGG_ORDER_ENTRY_SEDA_ENDPOINT = new CamelEndpoint("seda:egg_order_entry", "egg_order_entry");
+    public static final CamelEndpoint PASTA_ORDER_ENTRY_SEDA_ENDPOINT = new CamelEndpoint("seda:pasta_order_entry", "pasta_order_entry");
+    public static final CamelEndpoint MILK_ORDER_ENTRY_SEDA_ENDPOINT = new CamelEndpoint("seda:milk_order_entry", "milk_order_entry");
+    public static final CamelEndpoint MEAT_ORDER_ENTRY_SEDA_ENDPOINT = new CamelEndpoint("seda:meat_order_entry", "meat_order_entry");
 }

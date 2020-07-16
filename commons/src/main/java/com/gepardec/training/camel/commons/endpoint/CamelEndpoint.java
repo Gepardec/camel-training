@@ -32,6 +32,7 @@ public class CamelEndpoint {
             throw new IllegalArgumentException("URI and ID must not be empty");
         }
         this.uri = uri;
+        this.id = id;
     }
 
     public static void setTestMode(boolean testModeEnabled){

@@ -1,12 +1,23 @@
 package com.gepardec.training.camel.best.domain;
 
 public class OrderItem {
+
+    public static final int EGG = 1;
+    public static final int PASTA = 2;
+    public static final int MILK = 3;
+    public static final int MEAT = 4;
+
     long code;
     int amount;
 
     public OrderItem(){
-        code = 0;
+        code = 0L;
         amount = 0;
+    }
+
+    public OrderItem(long code, int amount){
+        this.code = code;
+        this.amount = amount;
     }
 
     public long getCode() {

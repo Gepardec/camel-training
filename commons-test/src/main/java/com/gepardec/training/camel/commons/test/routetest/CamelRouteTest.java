@@ -2,8 +2,10 @@ package com.gepardec.training.camel.commons.test.routetest;
 
 
 import com.gepardec.training.camel.commons.endpoint.CamelEndpoint;
+import com.gepardec.training.camel.commons.test.TestBase;
 import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.rest.RestEndpoint;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.support.DefaultExchange;
 import org.junit.jupiter.api.AfterEach;
@@ -23,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class CamelRouteTest {
+public class CamelRouteTest extends TestBase {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(CamelRouteTest.class);
 
@@ -141,19 +143,6 @@ public class CamelRouteTest {
 
     @Retention(RetentionPolicy.RUNTIME)
     public @interface MockedEndpoint {
-    }
-
-    public static String getFileAsString(final String filePath) throws IOException {
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        try (InputStream is = classLoader.getResourceAsStream(filePath)) {
-            if (is == null) {
-                return null;
-            }
-            try (InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
-                 BufferedReader reader = new BufferedReader(isr)) {
-                return reader.lines().collect(Collectors.joining(System.lineSeparator()));
-            }
-        }
     }
 
 }

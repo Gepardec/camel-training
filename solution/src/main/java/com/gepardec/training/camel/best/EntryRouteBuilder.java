@@ -1,41 +1,41 @@
 package com.gepardec.training.camel.best;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.gepardec.training.camel.best.domain.Order;
 import com.gepardec.training.camel.commons.endpoint.CamelEndpoint;
+import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.model.rest.RestBindingMode;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @ApplicationScoped
 public final class EntryRouteBuilder extends RouteBuilder {
 
-    public static final CamelEndpoint JSON_VALIDATOR_ENDPOINT = new CamelEndpoint("json-validator:json/schema/order.json", "json_validator_order");
-
     @Override
     public void configure() throws Exception {
 
+        onException(Exception.class)
+                .process(new ExceptionLoggingProcessor())
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
+                .setHeader(Exchange.CONTENT_TYPE, constant("text/plain"))
+                .handled(true);
+
         restConfiguration().component("servlet").bindingMode(RestBindingMode.json)
-                // and output using pretty print
                 .dataFormatProperty("prettyPrint", "true");
-                // setup context path and port number that Apache Tomcat will deploy
-                // this application with, as we use the servlet component, then we
-                // need to aid Camel to tell it these details so Camel knows the url
-                // to the REST services.
-                // Notice: This is optional, but needed if the RestRegistry should
-                // enlist accurate information. You can access the RestRegistry
-                // from JMX at runtime
-                //.contextPath("/").port(8080);
 
-        rest("/best/").post().to(Endpoints.ENTRY_DIRECT_ENDPOINT.endpointUri());
+        rest("/best/")
+                .post()
+                .consumes(MediaType.APPLICATION_JSON)
+                .type(Order.class)
+                .id("best_rest")
+                .route().to(Endpoints.SPLITTER_ENTRY_SEDA_ENDPOINT.endpointUri())
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(Response.Status.ACCEPTED.getStatusCode()))
+                .endRest();
 
-        // JSON Data Format
-        JacksonDataFormat jsonDataFormat = new JacksonDataFormat(Order.class);
-
-        from(Endpoints.ENTRY_DIRECT_ENDPOINT.endpointUri())
-                .to(JSON_VALIDATOR_ENDPOINT.endpointUri())
-                .unmarshal(jsonDataFormat)
-                .to(Endpoints.SPLITTER_ENTRY_SEDA_ENDPOINT.endpointUri());
     }
 }

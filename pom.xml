@@ -14,7 +14,6 @@
         <module>commons-test</module>
         <module>example</module>
         <module>solution</module>
-        <module>pkg</module>
     </modules>
 
     <properties>
@@ -178,7 +177,7 @@
             <dependency>
                 <groupId>io.rest-assured</groupId>
                 <artifactId>rest-assured</artifactId>
-                <version>4.1.2</version>
+                <version>4.3.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -186,6 +185,13 @@
                 <artifactId>javaee-api</artifactId>
                 <version>${javaee.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>${quarkus.platform.group-id}</groupId>
+                <artifactId>${quarkus.platform.artifact-id}</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
