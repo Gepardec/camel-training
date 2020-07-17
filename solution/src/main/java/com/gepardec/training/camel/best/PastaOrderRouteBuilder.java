@@ -1,5 +1,6 @@
 package com.gepardec.training.camel.best;
 
+import com.gepardec.training.camel.best.config.Endpoints;
 import org.apache.camel.builder.RouteBuilder;
 
 import javax.enterprise.context.ApplicationScoped;

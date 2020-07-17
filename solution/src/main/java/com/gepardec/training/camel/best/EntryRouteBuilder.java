@@ -1,12 +1,10 @@
 package com.gepardec.training.camel.best;
 
-import com.fasterxml.jackson.core.JsonParseException;
+import com.gepardec.training.camel.best.config.Endpoints;
 import com.gepardec.training.camel.best.domain.Order;
-import com.gepardec.training.camel.commons.endpoint.CamelEndpoint;
 import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.model.rest.RestBindingMode;
 
 import javax.enterprise.context.ApplicationScoped;

@@ -1,16 +1,13 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.domain.Order;
+import com.gepardec.training.camel.best.config.Endpoints;
+import com.gepardec.training.camel.best.config.ExchangeHeaders;
 import com.gepardec.training.camel.best.domain.OrderItem;
-import com.gepardec.training.camel.best.domain.OrderSplitter;
-import com.gepardec.training.camel.commons.endpoint.CamelEndpoint;
+import com.gepardec.training.camel.best.misc.OrderSplitter;
+import com.gepardec.training.camel.best.misc.OrderTransformer;
 import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
-import org.apache.camel.Exchange;
 import org.apache.camel.Predicate;
-import org.apache.camel.builder.PredicateBuilder;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.jackson.JacksonDataFormat;
-import org.apache.camel.model.rest.RestBindingMode;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -24,7 +21,10 @@ public final class SplitterRouteBuilder extends RouteBuilder {
                 .handled(true);
 
         from(Endpoints.SPLITTER_ENTRY_SEDA_ENDPOINT.endpointUri())
+                .setHeader(ExchangeHeaders.PARTNER_ID, simple("${body.partnerId}"))
                 .split().method(OrderSplitter.class).streaming()
+                .bean(OrderTransformer.class)
+                .removeHeader(ExchangeHeaders.PARTNER_ID)
                 .choice()
                     .when(hasItemCode(OrderItem.EGG))
                         .to(Endpoints.EGG_ORDER_ENTRY_SEDA_ENDPOINT.endpointUri())
@@ -38,7 +38,7 @@ public final class SplitterRouteBuilder extends RouteBuilder {
 
     }
 
-    public Predicate hasItemCode(long itemCode){
+    public Predicate hasItemCode(long itemCode) {
         return simple("${body.code} == " + itemCode);
     }
 }

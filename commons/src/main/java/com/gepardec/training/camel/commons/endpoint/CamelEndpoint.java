@@ -19,7 +19,8 @@ public class CamelEndpoint {
             "imap",
             "smtps",
             "pop3s",
-            "imaps"));
+            "imaps",
+            "jms"));
     public static final String ENDPOINT_TYPE_DIRECT = "direct";
     public static final String ENDPOINT_TYPE_SEDA = "seda";
     public static final String SYSPROP_TEST_MODE_ENABLED = "test.mode.enabled";

@@ -1,4 +1,4 @@
-package com.gepardec.training.camel.best;
+package com.gepardec.training.camel.best.config;
 
 import com.gepardec.training.camel.commons.endpoint.CamelEndpoint;
 
@@ -9,4 +9,6 @@ public final class Endpoints {
     public static final CamelEndpoint PASTA_ORDER_ENTRY_SEDA_ENDPOINT = new CamelEndpoint("seda:pasta_order_entry", "pasta_order_entry");
     public static final CamelEndpoint MILK_ORDER_ENTRY_SEDA_ENDPOINT = new CamelEndpoint("seda:milk_order_entry", "milk_order_entry");
     public static final CamelEndpoint MEAT_ORDER_ENTRY_SEDA_ENDPOINT = new CamelEndpoint("seda:meat_order_entry", "meat_order_entry");
+
+    public static final CamelEndpoint EGG_ORDER_JMS_ENDPOINT = new CamelEndpoint("jms:queue:eggs?disableReplyTo=true&username=quarkus&password=quarkus", "jms_queue_eggs");
 }

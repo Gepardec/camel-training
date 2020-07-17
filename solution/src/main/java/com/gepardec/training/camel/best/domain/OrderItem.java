@@ -7,8 +7,8 @@ public class OrderItem {
     public static final int MILK = 3;
     public static final int MEAT = 4;
 
-    long code;
-    int amount;
+    private long code;
+    private int amount;
 
     public OrderItem(){
         code = 0L;

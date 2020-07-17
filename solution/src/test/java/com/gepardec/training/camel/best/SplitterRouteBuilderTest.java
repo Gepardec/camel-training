@@ -1,7 +1,9 @@
 package com.gepardec.training.camel.best;
 
+import com.gepardec.training.camel.best.config.Endpoints;
 import com.gepardec.training.camel.best.domain.Order;
 import com.gepardec.training.camel.best.domain.OrderItem;
+import com.gepardec.training.camel.best.domain.OrderToProducer;
 import com.gepardec.training.camel.commons.endpoint.CamelEndpoint;
 import com.gepardec.training.camel.commons.test.routetest.CamelRouteTest;
 import org.apache.camel.Exchange;
@@ -48,6 +50,7 @@ class SplitterRouteBuilderTest extends CamelRouteTest {
         items.add(new OrderItem(OrderItem.MEAT, 140));
 
         order.setItems(items);
+        order.setPartnerId(1L);
     }
 
     @Test
@@ -56,9 +59,10 @@ class SplitterRouteBuilderTest extends CamelRouteTest {
         Exchange exchange = pollFromEndpoint(eggsMockedEndpoint);
         assertThat(exchange).isNotNull();
 
-        OrderItem item = exchange.getIn().getBody(OrderItem.class);
-        assertThat(item).isNotNull();
-        assertThat(item.getAmount()).isEqualTo(110);
+        OrderToProducer order = exchange.getIn().getBody(OrderToProducer.class);
+        assertThat(order).isNotNull();
+        assertThat(order.getAmount()).isEqualTo(110);
+        assertThat(order.getPartnerId()).isEqualTo(1L);
     }
 
     @Test
@@ -67,9 +71,10 @@ class SplitterRouteBuilderTest extends CamelRouteTest {
         Exchange exchange = pollFromEndpoint(pastaMockedEndpoint);
         assertThat(exchange).isNotNull();
 
-        OrderItem item = exchange.getIn().getBody(OrderItem.class);
-        assertThat(item).isNotNull();
-        assertThat(item.getAmount()).isEqualTo(120);
+        OrderToProducer order = exchange.getIn().getBody(OrderToProducer.class);
+        assertThat(order).isNotNull();
+        assertThat(order.getAmount()).isEqualTo(120);
+        assertThat(order.getPartnerId()).isEqualTo(1L);
     }
 
     @Test
@@ -78,9 +83,10 @@ class SplitterRouteBuilderTest extends CamelRouteTest {
         Exchange exchange = pollFromEndpoint(milkMockedEndpoint);
         assertThat(exchange).isNotNull();
 
-        OrderItem item = exchange.getIn().getBody(OrderItem.class);
-        assertThat(item).isNotNull();
-        assertThat(item.getAmount()).isEqualTo(130);
+        OrderToProducer order = exchange.getIn().getBody(OrderToProducer.class);
+        assertThat(order).isNotNull();
+        assertThat(order.getAmount()).isEqualTo(130);
+        assertThat(order.getPartnerId()).isEqualTo(1L);
     }
 
     @Test
@@ -89,9 +95,10 @@ class SplitterRouteBuilderTest extends CamelRouteTest {
         Exchange exchange = pollFromEndpoint(meatMockedEndpoint);
         assertThat(exchange).isNotNull();
 
-        OrderItem item = exchange.getIn().getBody(OrderItem.class);
-        assertThat(item).isNotNull();
-        assertThat(item.getAmount()).isEqualTo(140);
+        OrderToProducer order = exchange.getIn().getBody(OrderToProducer.class);
+        assertThat(order).isNotNull();
+        assertThat(order.getAmount()).isEqualTo(140);
+        assertThat(order.getPartnerId()).isEqualTo(1L);
     }
 
 }
