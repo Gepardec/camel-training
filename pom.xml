@@ -26,6 +26,8 @@
 
         <!-- Plugins -->
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <flyway.version>6.5.2</flyway.version>
+        <postgres.driver.version>42.2.14.jre7</postgres.driver.version>
 
         <!-- Dependencies -->
         <camel.version>3.3.0</camel.version>
@@ -46,6 +48,8 @@
         <assertj.version>3.14.0</assertj.version>
         <mockito.version>2.22.0</mockito.version>
         <maven.failsafe.version>2.22.2</maven.failsafe.version>
+        <db-setup.version>2.1.0</db-setup.version>
+        <assertj-db.version>2.0.0</assertj-db.version>
 
     </properties>
 

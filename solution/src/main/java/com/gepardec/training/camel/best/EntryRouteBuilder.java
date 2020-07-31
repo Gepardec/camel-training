@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 public final class EntryRouteBuilder extends RouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         onException(Exception.class)
                 .process(new ExceptionLoggingProcessor())

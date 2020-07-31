@@ -15,10 +15,10 @@ import javax.inject.Inject;
 public final class EggOrderRouteBuilder extends RouteBuilder {
 
     @Inject
-    private CamelContext camelContext;
+    CamelContext camelContext;
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         ConfigurationUtils.setupJmsConnectionFactory(camelContext, "tcp://localhost:61616", "quarkus", "quarkus");
 

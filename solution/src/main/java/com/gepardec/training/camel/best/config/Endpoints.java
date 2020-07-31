@@ -11,4 +11,5 @@ public final class Endpoints {
     public static final CamelEndpoint MEAT_ORDER_ENTRY_SEDA_ENDPOINT = new CamelEndpoint("seda:meat_order_entry", "meat_order_entry");
 
     public static final CamelEndpoint EGG_ORDER_JMS_ENDPOINT = new CamelEndpoint("jms:queue:eggs?disableReplyTo=true&username=quarkus&password=quarkus", "jms_queue_eggs");
+    public static final CamelEndpoint PASTA_ORDER_SQL_ENDPOINT = new CamelEndpoint("sql:insert into order_to_producer (id, partner_id, item_code, item_count) values (:#${bean:idGenerator.nextId}, :#${body.partnerId}, :#${body.code}, :#${body.amount})?dataSource=#postgres", "sql_pasta");
 }

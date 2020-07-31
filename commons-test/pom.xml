@@ -57,6 +57,18 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>com.ninja-squad</groupId>
+            <artifactId>DbSetup</artifactId>
+            <version>${db-setup.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-db</artifactId>
+            <version>${assertj-db.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.gepardec.training.camel</groupId>
             <artifactId>commons</artifactId>
             <version>${project.version}</version>

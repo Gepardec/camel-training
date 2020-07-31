@@ -13,7 +13,8 @@ public class CamelEndpoint {
 
     private static final Set<String> SYNC_ENDPOINTS = new HashSet<>(Arrays.asList("http",
             "https",
-            "file"));
+            "file",
+            "sql"));
     private static final Set<String> ASYNC_ENDPOINTS = new HashSet<>(Arrays.asList("smtp",
             "pop3",
             "imap",

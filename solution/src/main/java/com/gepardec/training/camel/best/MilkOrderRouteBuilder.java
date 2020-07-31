@@ -9,7 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 public final class MilkOrderRouteBuilder extends RouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         from(Endpoints.MILK_ORDER_ENTRY_SEDA_ENDPOINT.endpointUri())
                 .log("MILK ${body}");
     }

@@ -21,6 +21,7 @@ class EggOrderRouteBuilderTest extends CamelRouteTest {
     private EggOrderRouteBuilder eggOrderRouteBuilder;
 
     @MockedEndpoint
+    final
     CamelEndpoint jmsEndpoint = Endpoints.EGG_ORDER_JMS_ENDPOINT;
 
     @Test

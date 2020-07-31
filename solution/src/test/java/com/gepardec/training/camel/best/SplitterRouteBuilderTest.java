@@ -27,16 +27,16 @@ class SplitterRouteBuilderTest extends CamelRouteTest {
     private SplitterRouteBuilder splitterRouteBuilder;
 
     @MockedEndpoint
-    private CamelEndpoint eggsMockedEndpoint = Endpoints.EGG_ORDER_ENTRY_SEDA_ENDPOINT;
+    private final CamelEndpoint eggsMockedEndpoint = Endpoints.EGG_ORDER_ENTRY_SEDA_ENDPOINT;
 
     @MockedEndpoint
-    private CamelEndpoint meatMockedEndpoint = Endpoints.MEAT_ORDER_ENTRY_SEDA_ENDPOINT;
+    private final CamelEndpoint meatMockedEndpoint = Endpoints.MEAT_ORDER_ENTRY_SEDA_ENDPOINT;
 
     @MockedEndpoint
-    private CamelEndpoint milkMockedEndpoint = Endpoints.MILK_ORDER_ENTRY_SEDA_ENDPOINT;
+    private final CamelEndpoint milkMockedEndpoint = Endpoints.MILK_ORDER_ENTRY_SEDA_ENDPOINT;
 
     @MockedEndpoint
-    private CamelEndpoint pastaMockedEndpoint = Endpoints.PASTA_ORDER_ENTRY_SEDA_ENDPOINT;
+    private final CamelEndpoint pastaMockedEndpoint = Endpoints.PASTA_ORDER_ENTRY_SEDA_ENDPOINT;
 
     private Order order;
 
@@ -54,7 +54,7 @@ class SplitterRouteBuilderTest extends CamelRouteTest {
     }
 
     @Test
-    public void correctInput_CorrectOutputToEggs() throws IOException {
+    public void correctInput_CorrectOutputToEggs() {
         sendToEndpoint(Endpoints.SPLITTER_ENTRY_SEDA_ENDPOINT, order);
         Exchange exchange = pollFromEndpoint(eggsMockedEndpoint);
         assertThat(exchange).isNotNull();
@@ -66,7 +66,7 @@ class SplitterRouteBuilderTest extends CamelRouteTest {
     }
 
     @Test
-    public void correctInput_CorrectOutputToPasta() throws IOException {
+    public void correctInput_CorrectOutputToPasta() {
         sendToEndpoint(Endpoints.SPLITTER_ENTRY_SEDA_ENDPOINT, order);
         Exchange exchange = pollFromEndpoint(pastaMockedEndpoint);
         assertThat(exchange).isNotNull();
@@ -78,7 +78,7 @@ class SplitterRouteBuilderTest extends CamelRouteTest {
     }
 
     @Test
-    public void correctInput_CorrectOutputToMilk() throws IOException {
+    public void correctInput_CorrectOutputToMilk() {
         sendToEndpoint(Endpoints.SPLITTER_ENTRY_SEDA_ENDPOINT, order);
         Exchange exchange = pollFromEndpoint(milkMockedEndpoint);
         assertThat(exchange).isNotNull();
@@ -90,7 +90,7 @@ class SplitterRouteBuilderTest extends CamelRouteTest {
     }
 
     @Test
-    public void correctInput_CorrectOutputToMeat() throws IOException {
+    public void correctInput_CorrectOutputToMeat() {
         sendToEndpoint(Endpoints.SPLITTER_ENTRY_SEDA_ENDPOINT, order);
         Exchange exchange = pollFromEndpoint(meatMockedEndpoint);
         assertThat(exchange).isNotNull();

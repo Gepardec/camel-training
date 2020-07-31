@@ -55,11 +55,6 @@
             <artifactId>commons-collections4</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.gepardec.training.camel</groupId>
             <artifactId>commons</artifactId>
             <version>${project.version}</version>
@@ -84,6 +79,10 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-postgresql</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel.quarkus</groupId>
@@ -145,10 +144,10 @@
             <groupId>org.apache.camel.quarkus</groupId>
             <artifactId>camel-quarkus-file-watch</artifactId>
         </dependency>
-        <!--dependency>
+        <dependency>
             <groupId>org.apache.camel.quarkus</groupId>
             <artifactId>camel-quarkus-sql</artifactId>
-        </dependency-->
+        </dependency>
         <!--dependency>
             <groupId>org.apache.camel.quarkus</groupId>
             <artifactId>camel-quarkus-jdbc</artifactId>
@@ -257,6 +256,26 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${flyway.version}</version>
+                <configuration>
+                    <user>quarkus</user>
+                    <password>quarkus</password>
+                    <url>jdbc:postgresql://localhost:5432/quarkus</url>
+                    <schemas>
+                        <schema>quarkus</schema>
+                    </schemas>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${postgres.driver.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

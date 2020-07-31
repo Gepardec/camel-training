@@ -15,7 +15,7 @@ import javax.enterprise.context.ApplicationScoped;
 public final class SplitterRouteBuilder extends RouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         onException(Exception.class)
                 .process(new ExceptionLoggingProcessor())
                 .handled(true);

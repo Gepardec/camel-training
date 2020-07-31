@@ -9,7 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 public final class MeatOrderRouteBuilder extends RouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         from(Endpoints.MEAT_ORDER_ENTRY_SEDA_ENDPOINT.endpointUri())
                 .log("MEAT ${body}");
     }

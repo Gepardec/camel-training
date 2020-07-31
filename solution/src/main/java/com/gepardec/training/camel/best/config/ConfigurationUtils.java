@@ -1,13 +1,8 @@
 package com.gepardec.training.camel.best.config;
 
-import io.quarkus.runtime.Startup;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
 import org.apache.camel.component.jms.JmsComponent;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 public final class ConfigurationUtils {
 
