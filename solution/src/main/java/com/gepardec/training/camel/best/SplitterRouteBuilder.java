@@ -34,6 +34,8 @@ public final class SplitterRouteBuilder extends RouteBuilder {
                         .to(Endpoints.MILK_ORDER_ENTRY_SEDA_ENDPOINT.endpointUri())
                     .when(hasItemCode(OrderItem.MEAT))
                         .to(Endpoints.MEAT_ORDER_ENTRY_SEDA_ENDPOINT.endpointUri())
+                    .otherwise()
+                        .log("ERROR...")
                 .end();
 
     }
