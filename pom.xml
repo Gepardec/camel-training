@@ -32,7 +32,7 @@
         <!-- Dependencies -->
         <camel.version>3.3.0</camel.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <jackson.version>2.9.5</jackson.version>
+        <jackson.version>2.11.1</jackson.version>
         <apache-commons-lang.version>3.9</apache-commons-lang.version>
         <apache-commons-collections.version>4.4</apache-commons-collections.version>
         <javaee.version>7.0</javaee.version>
