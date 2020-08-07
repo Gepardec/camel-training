@@ -1,7 +1,7 @@
 My first Camel route
 ===================
 
-Prereqitites: Maven, Java
+Prerequisites: Maven, Java
 
 Run
 ``` 
@@ -15,8 +15,24 @@ mvn archetype:generate \
 Then run
 
 ``` 
+cd simple-routes/
+mvn install
 mvn camel:run
 ``` 
 
 What happened?
 
+Change the route such that messages with people from vienna are saved in a directory "at" and test it.
+
+Create a Main-Class in order to start the routes from within the IDE
+
+```
+import org.apache.camel.spring.Main;
+
+public class ApplicationSpringCamel {
+
+     public static void main(String... args) throws Exception {
+        Main.main(args);
+    }
+}
+```
