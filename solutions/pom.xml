@@ -13,7 +13,7 @@
         <module>commons</module>
         <module>commons-test</module>
         <module>example</module>
-        <module>solution</module>
+        <module>best</module>
         <module>simple-cdi</module>
         <module>simple-route</module>
     </modules>
