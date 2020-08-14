@@ -15,7 +15,7 @@
         <module>example</module>
         <module>best</module>
         <module>simple-cdi</module>
-        <module>simple-route</module>
+        <module>simple-routes</module>
     </modules>
 
     <properties>
