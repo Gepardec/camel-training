@@ -24,7 +24,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
         <downloadSources>true</downloadSources>
-		<maven.failsafe.skip>true</maven.failsafe.skip>
+        <maven.failsafe.skip>true</maven.failsafe.skip>
 
         <!-- Plugins -->
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -56,7 +56,7 @@
     </properties>
 
     <dependencyManagement>
-        <dependencies>          
+        <dependencies>
             <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-core</artifactId>
@@ -179,7 +179,7 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>${apache-commons-collections.version}</version>
-            </dependency>   
+            </dependency>
             <dependency>
                 <groupId>io.rest-assured</groupId>
                 <artifactId>rest-assured</artifactId>
