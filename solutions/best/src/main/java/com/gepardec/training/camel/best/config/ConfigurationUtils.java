@@ -6,13 +6,13 @@ import org.apache.camel.component.jms.JmsComponent;
 
 public final class ConfigurationUtils {
 
-    private ConfigurationUtils(){
+    private ConfigurationUtils() {
 
     }
 
     public static void setupJmsConnectionFactory(CamelContext camelContext, String brokerUrl, String username, String password) {
 
-        if(camelContext == null){
+        if (camelContext == null) {
             return;
         }
 
@@ -21,6 +21,9 @@ public final class ConfigurationUtils {
         cf.setUserName(username);
 
         JmsComponent jmsComponent = JmsComponent.jmsComponentAutoAcknowledge(cf);
-        camelContext.addComponent("jms", jmsComponent);
+        if (camelContext.hasComponent("jms") == null) {
+            camelContext.addComponent("jms", jmsComponent);
+        }
+
     }
 }

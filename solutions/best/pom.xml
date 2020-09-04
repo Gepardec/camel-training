@@ -25,6 +25,12 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test-cdi</artifactId>
+            <scope>provided</scope>
+            <!-- use the same version as your Camel core version -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
             <artifactId>camel-rest</artifactId>
             <scope>provided</scope>
         </dependency>
