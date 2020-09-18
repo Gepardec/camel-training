@@ -26,6 +26,8 @@ public final class EntryRouteBuilder extends RouteBuilder {
         restConfiguration().component("servlet").bindingMode(RestBindingMode.json)
                 .dataFormatProperty("prettyPrint", "true");
 
+        restConfiguration().component("netty-http").host("localhost").port(8080).bindingMode(RestBindingMode.auto);
+
         rest("/best/")
                 .post()
                 .consumes(MediaType.APPLICATION_JSON)

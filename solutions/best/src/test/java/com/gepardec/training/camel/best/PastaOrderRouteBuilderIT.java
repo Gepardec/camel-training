@@ -1,14 +1,13 @@
 package com.gepardec.training.camel.best;
 
 import com.gepardec.training.camel.best.db.CommonOperations;
-import com.gepardec.training.camel.best.db.DbConnection;
+import com.gepardec.training.camel.best.config.DbConnection;
 import com.gepardec.training.camel.commons.test.integrationtest.CamelIntegrationTest;
 import com.gepardec.training.camel.commons.test.integrationtest.RestServiceTestSupport;
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.destination.DataSourceDestination;
 import com.ninja_squad.dbsetup.operation.Operation;
 import org.assertj.db.type.Table;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
