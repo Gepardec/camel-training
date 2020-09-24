@@ -1,21 +1,22 @@
 package com.gepardec.training.camel.commons.endpoint;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CamelEndpointTest {
+public class CamelEndpointTest {
 
     public static final String ID_TEST = "test";
 
-    @Test
-    void emptyEndpointUser_ExceptionThrown() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new CamelEndpoint("", ""));
+    @Test(expected = IllegalArgumentException.class)
+    public void emptyEndpointUser_ExceptionThrown() {
+        new CamelEndpoint("", "");
     }
 
     @Test
-    void sedaEndpoint_SameTestAndRouteEndpoint() {
+    public void sedaEndpoint_SameTestAndRouteEndpoint() {
         String uri = "seda:test";
         CamelEndpoint endpoint = new CamelEndpoint(uri, ID_TEST);
 
@@ -29,7 +30,7 @@ class CamelEndpointTest {
     }
 
     @Test
-    void directEndpoint_SameTestAndRouteEndpoint() {
+    public void directEndpoint_SameTestAndRouteEndpoint() {
         String uri = "direct:test";
         CamelEndpoint endpoint = new CamelEndpoint(uri, ID_TEST);
 
@@ -43,7 +44,7 @@ class CamelEndpointTest {
     }
 
     @Test
-    void httpEndpoint_DirectTestEndpoint() {
+    public void httpEndpoint_DirectTestEndpoint() {
         String uri = "http:test";
         CamelEndpoint endpoint = new CamelEndpoint(uri, ID_TEST);
 
@@ -58,7 +59,7 @@ class CamelEndpointTest {
     }
 
     @Test
-    void emailEndpoint_SedaTestEndpoint() {
+    public void emailEndpoint_SedaTestEndpoint() {
         String uri = "smtps://test?username=usr&password=pwd";
         CamelEndpoint endpoint = new CamelEndpoint(uri, ID_TEST);
 

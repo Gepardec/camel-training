@@ -1,35 +1,33 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.config.DbConnection;
-import com.gepardec.training.camel.best.config.Endpoints;
-import com.gepardec.training.camel.best.misc.IdGenerator;
 import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
-import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.io.IOException;
 import java.sql.SQLException;
 
 @ApplicationScoped
 public final class PastaOrderRouteBuilder extends RouteBuilder {
 
-    @Inject
-    CamelContext camelContext;
+    public static final String ENTRY_SEDA_ENDOINT_URI = "seda:pasta_order_entry";
+    public static final String ENTRY_SEDA_ENDOINT_ID = "pasta_order_entry";
+
+    public static final String OUTPUT_SQL_ENDPOINT_URI = "sql:insert into order_to_producer (id, partner_id, item_code, item_count) values (:#${bean:idGenerator.nextId}, :#${body.partnerId}, :#${body.code}, :#${body.amount})?dataSource=#postgres";
+    public static final String OUTPUT_SQL_ENDPOINT_ID = "sql_pasta";
+
+    public static final String ROUTE_ID = "PastaOrderRouteBuilder";
 
     @Override
     public void configure() throws IOException, SQLException {
-
-        camelContext.getRegistry().bind("idGenerator", new IdGenerator());
-        camelContext.getRegistry().bind("postgres", DbConnection.getDatasource());
 
         onException(Exception.class)
                 .process(new ExceptionLoggingProcessor())
                 .handled(true);
 
-        from(Endpoints.PASTA_ORDER_ENTRY_SEDA_ENDPOINT.endpointUri())
-                .to(Endpoints.PASTA_ORDER_SQL_ENDPOINT.endpointUri());
+        from(ENTRY_SEDA_ENDOINT_URI)
+                .routeId(ROUTE_ID)
+                .to(OUTPUT_SQL_ENDPOINT_URI).id(OUTPUT_SQL_ENDPOINT_ID);
     }
 
 }
