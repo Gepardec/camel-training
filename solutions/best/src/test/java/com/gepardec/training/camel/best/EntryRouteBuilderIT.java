@@ -2,11 +2,11 @@ package com.gepardec.training.camel.best;
 
 import com.gepardec.training.camel.commons.test.TestBase;
 import com.gepardec.training.camel.commons.test.integrationtest.RestServiceTestSupport;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.IOException;
 
-class EntryRouteBuilderIT extends TestBase {
+public class EntryRouteBuilderIT extends TestBase {
 
     private static final String WRONG_JSON_FILE_PATH = "json/order_wrong_format.json";
 

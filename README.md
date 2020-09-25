@@ -23,3 +23,8 @@ mvn flyway:migrate
 ```
 mvn camel:run
 ```
+
+**Run Integration Tests**
+```
+mvn -Dmaven.failsafe.skip=false failsafe:integration-test
+```

@@ -1,9 +1,12 @@
 package com.gepardec.training.camel.best;
 
 import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
+import org.apache.camel.Endpoint;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.cdi.Uri;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -18,6 +21,14 @@ public final class PastaOrderRouteBuilder extends RouteBuilder {
 
     public static final String ROUTE_ID = "PastaOrderRouteBuilder";
 
+    @Inject
+    @Uri(ENTRY_SEDA_ENDOINT_URI)
+    private Endpoint entryEndpoint;
+
+    @Inject
+    @Uri(OUTPUT_SQL_ENDPOINT_URI)
+    private Endpoint sqlEndpoint;
+
     @Override
     public void configure() throws IOException, SQLException {
 
@@ -25,9 +36,9 @@ public final class PastaOrderRouteBuilder extends RouteBuilder {
                 .process(new ExceptionLoggingProcessor())
                 .handled(true);
 
-        from(ENTRY_SEDA_ENDOINT_URI)
+        from(entryEndpoint).id(ENTRY_SEDA_ENDOINT_ID)
                 .routeId(ROUTE_ID)
-                .to(OUTPUT_SQL_ENDPOINT_URI).id(OUTPUT_SQL_ENDPOINT_ID);
+                .to(sqlEndpoint).id(OUTPUT_SQL_ENDPOINT_ID);
     }
 
 }

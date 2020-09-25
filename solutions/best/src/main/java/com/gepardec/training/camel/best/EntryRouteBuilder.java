@@ -33,7 +33,7 @@ public final class EntryRouteBuilder extends RouteBuilder {
                 .consumes(MediaType.APPLICATION_JSON)
                 .type(Order.class)
                 .id("best_rest")
-                .route().to(Endpoints.SPLITTER_ENTRY_SEDA_ENDPOINT.endpointUri())
+                .route().to(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(Response.Status.ACCEPTED.getStatusCode()))
                 .endRest();
 
