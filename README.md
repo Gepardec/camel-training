@@ -16,6 +16,10 @@ docker run -it --rm -p 5432:5432 -e POSTGRES_DB=quarkus -e POSTGRES_USER=quarkus
 ```
 
 ```
+cd ./solutions/best
+```
+
+```
 mvn flyway:migrate
 ```
 
