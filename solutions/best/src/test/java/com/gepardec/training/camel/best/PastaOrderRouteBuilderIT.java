@@ -1,15 +1,14 @@
 package com.gepardec.training.camel.best;
 
+import com.gepardec.training.camel.best.config.DbConnection;
 import com.gepardec.training.camel.best.db.CommonOperations;
-import com.gepardec.training.camel.best.db.DbConnection;
 import com.gepardec.training.camel.commons.test.integrationtest.CamelIntegrationTest;
 import com.gepardec.training.camel.commons.test.integrationtest.RestServiceTestSupport;
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.destination.DataSourceDestination;
 import com.ninja_squad.dbsetup.operation.Operation;
 import org.assertj.db.type.Table;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -18,7 +17,7 @@ import java.sql.SQLException;
 import static com.ninja_squad.dbsetup.operation.CompositeOperation.sequenceOf;
 import static org.assertj.db.api.Assertions.assertThat;
 
-class PastaOrderRouteBuilderIT extends CamelIntegrationTest {
+public class PastaOrderRouteBuilderIT extends CamelIntegrationTest {
 
     private static final String MILK_JSON_FILE_PATH = "json/order_milk.json";
     private static final String PASTA_JSON_FILE_PATH = "json/order_pasta.json";

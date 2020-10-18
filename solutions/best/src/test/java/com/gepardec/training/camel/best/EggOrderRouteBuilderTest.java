@@ -1,38 +1,45 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.config.Endpoints;
 import com.gepardec.training.camel.best.domain.OrderItem;
 import com.gepardec.training.camel.best.domain.OrderToProducer;
-import com.gepardec.training.camel.commons.endpoint.CamelEndpoint;
-import com.gepardec.training.camel.commons.test.routetest.CamelRouteTest;
+import com.gepardec.training.camel.commons.test.routetest.CamelRouteCDITest;
+import com.gepardec.training.camel.commons.test.routetest.MockedRouteId;
+import com.gepardec.training.camel.commons.test.routetest.MockedEndpointId;
 import org.apache.camel.Exchange;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.apache.camel.cdi.Uri;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.test.cdi.Beans;
+import org.apache.camel.test.cdi.CamelCdiRunner;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import javax.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
-class EggOrderRouteBuilderTest extends CamelRouteTest {
+@RunWith(CamelCdiRunner.class)
+@Beans(classes = EggOrderRouteBuilder.class)
+@MockedRouteId(EggOrderRouteBuilder.ROUTE_ID)
+public class EggOrderRouteBuilderTest extends CamelRouteCDITest {
 
-    @RouteUnderTest
-    @InjectMocks
-    private EggOrderRouteBuilder eggOrderRouteBuilder;
-
-    @MockedEndpoint
-    final
-    CamelEndpoint jmsEndpoint = Endpoints.EGG_ORDER_JMS_ENDPOINT;
+    @Inject
+    @Uri("mock:result")
+    @MockedEndpointId(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_ID)
+    private MockEndpoint result;
 
     @Test
-    public void correctInput_correctMessageToQueue(){
+    public void correctInput_messageInQueue() throws InterruptedException {
         OrderToProducer orderToProducer = new OrderToProducer();
         orderToProducer.setCode(OrderItem.EGG);
         orderToProducer.setAmount(2);
         orderToProducer.setPartnerId(3);
 
-        sendToEndpoint(Endpoints.EGG_ORDER_ENTRY_SEDA_ENDPOINT, orderToProducer);
-        Exchange exchange = pollFromEndpoint(jmsEndpoint);
+        result.expectedMessageCount(1);
+        
+        // Then
+        sendToEndpoint(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI, orderToProducer);
+        result.assertIsSatisfied();
+        final Exchange exchange = result.getExchanges().get(0);
         assertThat(exchange).isNotNull();
         assertThat(exchange.getIn().getBody()).isNotNull();
         assertThat(exchange.getIn().getBody(String.class))
@@ -40,14 +47,16 @@ class EggOrderRouteBuilderTest extends CamelRouteTest {
                 .containsIgnoringCase("amount>2</")
                 .containsIgnoringCase("code>1</")
                 .containsIgnoringCase("partnerId>3</");
+        result.reset();
     }
 
     @Test
-    public void wrongInput_noMessageToQueue(){
-        sendToEndpoint(Endpoints.EGG_ORDER_ENTRY_SEDA_ENDPOINT, "string");
-        Exchange exchange = pollFromEndpoint(jmsEndpoint);
-        assertThat(exchange).isNull();
+    public void wrongInput_noMessageToQueue() throws InterruptedException{
+        result.expectedMessageCount(0);
+        // Then
+        sendToEndpoint(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI, "string");
+        result.assertIsSatisfied();
+        result.reset();
     }
-
 
 }

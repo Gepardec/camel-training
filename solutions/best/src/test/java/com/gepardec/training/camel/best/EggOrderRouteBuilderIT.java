@@ -5,22 +5,22 @@ import com.gepardec.training.camel.best.config.Endpoints;
 import com.gepardec.training.camel.commons.test.integrationtest.CamelIntegrationTest;
 import com.gepardec.training.camel.commons.test.integrationtest.RestServiceTestSupport;
 import org.apache.camel.Exchange;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class EggOrderRouteBuilderIT extends CamelIntegrationTest {
+public class EggOrderRouteBuilderIT extends CamelIntegrationTest {
 
     private static final String MILK_JSON_FILE_PATH = "json/order_milk.json";
     private static final String EGGS_JSON_FILE_PATH = "json/order_eggs.json";
 
-    @BeforeEach
+    @Before
     public void setup(){
-        ConfigurationUtils.setupJmsConnectionFactory(camelContext, "tcp://localhost:61616", "quarkus", "quarkus");
-        clearEndpointQueue(Endpoints.EGG_ORDER_JMS_ENDPOINT);
+        camelContext.getRegistry().bind("JMSConnectionFactory", ConfigurationUtils.getJmsConnectionFactory("tcp://localhost:61616", "quarkus", "quarkus"));
+        clearEndpointQueue(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
     }
 
     @Test
@@ -34,7 +34,7 @@ class EggOrderRouteBuilderIT extends CamelIntegrationTest {
     public void correctInputJson_CorrectJavaObjectIsCreated() throws IOException {
         String json = getFileAsString(EGGS_JSON_FILE_PATH);
         RestServiceTestSupport.callPost("", json, 202);
-        Exchange exchange = pollFromEndpoint(Endpoints.EGG_ORDER_JMS_ENDPOINT.endpointUri());
+        Exchange exchange = pollFromEndpoint(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
         assertThat(exchange).isNotNull();
         assertThat(exchange.getIn().getBody()).isNotNull();
         assertThat(exchange.getIn().getBody(String.class))

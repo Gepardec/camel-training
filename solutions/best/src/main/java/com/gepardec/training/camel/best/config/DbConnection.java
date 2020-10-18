@@ -1,4 +1,4 @@
-package com.gepardec.training.camel.best.db;
+package com.gepardec.training.camel.best.config;
 
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;

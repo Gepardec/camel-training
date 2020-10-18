@@ -16,5 +16,19 @@ docker run -it --rm -p 5432:5432 -e POSTGRES_DB=quarkus -e POSTGRES_USER=quarkus
 ```
 
 ```
+cd ./solutions/best
+```
+
+```
 mvn flyway:migrate
+```
+
+**Run Camel**
+```
+mvn camel:run
+```
+
+**Run Integration Tests**
+```
+mvn -Dmaven.failsafe.skip=false failsafe:integration-test
 ```

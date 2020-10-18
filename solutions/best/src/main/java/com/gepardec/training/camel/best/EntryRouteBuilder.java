@@ -26,12 +26,14 @@ public final class EntryRouteBuilder extends RouteBuilder {
         restConfiguration().component("servlet").bindingMode(RestBindingMode.json)
                 .dataFormatProperty("prettyPrint", "true");
 
+        restConfiguration().component("netty-http").host("localhost").port(8080).bindingMode(RestBindingMode.auto);
+
         rest("/best/")
                 .post()
                 .consumes(MediaType.APPLICATION_JSON)
                 .type(Order.class)
                 .id("best_rest")
-                .route().to(Endpoints.SPLITTER_ENTRY_SEDA_ENDPOINT.endpointUri())
+                .route().to(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(Response.Status.ACCEPTED.getStatusCode()))
                 .endRest();
 
