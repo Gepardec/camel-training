@@ -9,8 +9,8 @@ mvn archetype:generate \
   -DarchetypeGroupId=org.apache.camel.archetypes \
   -DarchetypeArtifactId=camel-archetype-cdi \
   -DarchetypeVersion=3.4.2 \
-  -DgroupId=at.gepardec.trainings.camel \
-  -DartifactId=simple-cdi
+  -DgroupId=com.gepardec.trainings.camel.best \
+  -DartifactId=best
 ``` 
 Then run
 
@@ -41,7 +41,7 @@ Add Support for Main-Class:
 ```
 
 ```
-package at.gepardec.trainings.camel;
+package com.gepardec.trainings.camel.best;
 
 import org.apache.camel.cdi.Main;
 
