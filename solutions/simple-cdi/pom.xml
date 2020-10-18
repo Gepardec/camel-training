@@ -61,6 +61,12 @@
         <version>${deltaspike-version}</version>
         <scope>runtime</scope>
     </dependency>
+	<dependency>
+	    <groupId>org.apache.camel</groupId>
+	    <artifactId>camel-core-xml</artifactId>
+	    <scope>runtime</scope>
+	</dependency>
+
     <dependency>
         <groupId>org.jboss.weld.se</groupId>
         <artifactId>weld-se-shaded</artifactId>

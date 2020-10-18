@@ -1,4 +1,4 @@
-package at.gepardec.trainings.camel;
+package com.gepardec.trainings.camel.best;
 
 import org.apache.camel.cdi.Main;
 

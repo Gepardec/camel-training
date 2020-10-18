@@ -1,14 +1,16 @@
-package at.gepardec.trainings.camel;
+package com.gepardec.trainings.camel.best;
 
 import javax.inject.Inject;
 
 import org.apache.camel.Endpoint;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.cdi.ImportResource;
 import org.apache.camel.cdi.Uri;
 
 /**
  * Configures all our Camel routes, components, endpoints and beans
  */
+@ImportResource("camel-context.xml")
 public class MyRoutes extends RouteBuilder {
 
     @Inject
@@ -16,7 +18,7 @@ public class MyRoutes extends RouteBuilder {
     private Endpoint inputEndpoint;
 
     @Inject
-    @Uri("log:output")
+    @Uri("log:java_route")
     private Endpoint resultEndpoint;
 
     @Override
