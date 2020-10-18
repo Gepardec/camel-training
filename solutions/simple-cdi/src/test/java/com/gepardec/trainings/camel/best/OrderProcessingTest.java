@@ -1,6 +1,7 @@
 package com.gepardec.trainings.camel.best;
 
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.direct.DirectEndpoint;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.cdi.CamelCdiRunner;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -18,6 +19,10 @@ public class OrderProcessingTest extends CamelTestSupport {
 
         MockEndpoint resultEndpoint = resolveMandatoryEndpoint("mock:result", MockEndpoint.class);
         resultEndpoint.expectedMessageCount(1);
+        resultEndpoint.expectedBodiesReceived(orderIn + "x");
+        
+        DirectEndpoint directOrderInEndpoint = resolveMandatoryEndpoint(MyRoutes.DIRECT_ORDER_IN, DirectEndpoint.class);
+        
         
         template.sendBody("direct:start", orderIn);
         resultEndpoint.assertIsSatisfied();

@@ -75,6 +75,7 @@ public class OrderProcessingTest extends CamelTestSupport {
 
         MockEndpoint resultEndpoint = resolveMandatoryEndpoint("mock:result", MockEndpoint.class);
         resultEndpoint.expectedMessageCount(1);
+        resultEndpoint.expectedBodiesReceived(orderIn);
 
         template.sendBody("direct:start", orderIn);
         resultEndpoint.assertIsSatisfied();
