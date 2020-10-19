@@ -1,0 +1,1 @@
+{"shoppingListItems":[{"code":2,"amount":2},{"code":1,"amount":10},{"code":3,"amount":2},{"code":4,"amount":0},{"code":2,"amount":3},{"code":1,"amount":0}],"name":"basics"}
