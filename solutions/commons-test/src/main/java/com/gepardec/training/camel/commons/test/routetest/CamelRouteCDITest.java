@@ -68,9 +68,13 @@ public class CamelRouteCDITest extends TestBase {
 
                     //adviced.add(mockedEndpointId.value());
 
-                    in.weaveById(mockedEndpointId.value())
-                            .replace()
-                            .to(uri.value());
+                    if(field.getType().equals(ProducerTemplate.class)){
+                        in.replaceFromWith(uri.value());
+                    } else {
+                        in.weaveById(mockedEndpointId.value())
+                                .replace()
+                                .to(uri.value());
+                    }
 
                 }
             }
