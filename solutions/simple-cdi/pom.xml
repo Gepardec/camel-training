@@ -74,6 +74,12 @@
         <scope>runtime</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-jackson</artifactId>
+    </dependency>
+
+
     <!-- logging -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
