@@ -1,4 +1,4 @@
-package org.apache.camel.example.cdi;
+package com.gepardec.trainings.camel.best;
 
 import org.apache.camel.cdi.Main;
 
