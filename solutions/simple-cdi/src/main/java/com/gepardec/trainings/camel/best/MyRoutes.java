@@ -1,13 +1,9 @@
 package com.gepardec.trainings.camel.best;
 
-import javax.inject.Inject;
-
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.AdviceWithRouteBuilder;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.cdi.Uri;
 import org.apache.camel.component.jackson.JacksonDataFormat;
 
 import com.gepardec.training.camel.best.domain.Order;
@@ -47,18 +43,5 @@ public class MyRoutes extends AdviceWithRouteBuilder {
         .marshal(orderFormat)
         .log("Processed order ${body}")
         .to(URL_FILE_ORDERS_OUT);
-  /*  	
-    	JacksonDataFormat orderFormat = new JacksonDataFormat(Order.class);
-    	
-        from(URL_FILE_ORDERS_IN)
-        .log("Process order ${body}")
-        .unmarshal(orderFormat)
-        .to(DIRECT_ORDER_IN);
-        
-        from(DIRECT_ORDER_IN)
-        .marshal(orderFormat)
-        .log("to file processed ep: ${body}")
-        .to(URL_FILE_ORDERS_OUT);
-        */
     }
 }
