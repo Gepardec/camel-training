@@ -7,7 +7,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "OrderToProducer")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrderToProducer extends OrderItem{
+
     private long partnerId;
+
+    public OrderToProducer(OrderItem item, long partnerId) {
+        this.setCode(item.getCode());
+        this.setAmount(item.getAmount());
+        this.setPartnerId(partnerId);
+    }
+
+    public OrderToProducer() {
+        super();
+    }
 
     public long getPartnerId() {
         return partnerId;

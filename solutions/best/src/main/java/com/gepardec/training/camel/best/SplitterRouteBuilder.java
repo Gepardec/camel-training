@@ -1,9 +1,7 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.config.ExchangeHeaders;
 import com.gepardec.training.camel.best.domain.OrderItem;
 import com.gepardec.training.camel.best.misc.OrderSplitter;
-import com.gepardec.training.camel.best.misc.OrderTransformer;
 import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Predicate;
@@ -43,24 +41,29 @@ public final class SplitterRouteBuilder extends RouteBuilder {
                 .process(new ExceptionLoggingProcessor())
                 .handled(true);
 
+        //@formatter:off
         from(ENTRY_SEDA_ENDOINT_URI).id(ENTRY_SEDA_ENDOINT_ID)
                 .routeId(ROUTE_ID)
-                .setHeader(ExchangeHeaders.PARTNER_ID, simple("${body.partnerId}"))
-                .split().method(OrderSplitter.class).streaming()
-                .bean(OrderTransformer.class)
-                .removeHeader(ExchangeHeaders.PARTNER_ID)
+                .split().method(OrderSplitter.class)
+                .log("! ${body}")
+                .to("direct:choice").id("bla");
+
+
+        from("direct:choice").id("bla").routeId("Blubb").log("!! ${body}")
                 .choice()
-                .when(hasItemCode(OrderItem.EGG))
-                .to(eggEndpoint).id(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
-                .when(hasItemCode(OrderItem.PASTA))
-                .to(pastaEndpoint).id(PastaOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
-                .when(hasItemCode(OrderItem.MILK))
-                .to(milkEndpoint).id(MilkOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
-                .when(hasItemCode(OrderItem.MEAT))
-                .to(meatEndpoint).id(MeatOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
+                    .when(hasItemCode(OrderItem.EGG))
+                        .to(eggEndpoint).id(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
+                    .when(hasItemCode(OrderItem.PASTA))
+                        .to(pastaEndpoint).id(PastaOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
+                    .when(hasItemCode(OrderItem.MILK))
+                        .to(milkEndpoint).id(MilkOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
+                    .when(hasItemCode(OrderItem.MEAT))
+                        .to(meatEndpoint).id(MeatOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
                 .otherwise()
-                .log("ERROR...")
+                    .log("ERROR...")
                 .end();
+        //@formatter:on
+
 
     }
 

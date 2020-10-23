@@ -29,24 +29,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SplitterRouteBuilderTest extends CamelRouteCDITest {
 
     @Inject
-    @Uri("mock:egg_result")
-    @MockedEndpointId(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
-    private MockEndpoint eggResult;
-
-    @Inject
-    @Uri("mock:pasta_result")
-    @MockedEndpointId(PastaOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
-    private MockEndpoint pastaResult;
-
-    @Inject
-    @Uri("mock:meat_result")
-    @MockedEndpointId(MeatOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
-    private MockEndpoint meatResult;
-
-    @Inject
-    @Uri("mock:milk_result")
-    @MockedEndpointId(MilkOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
-    private MockEndpoint milkResult;
+    @Uri("log:!!!! ${body}")
+    @MockedEndpointId("bla")
+    private MockEndpoint choiceEndpoint;
 
     private Order order;
 
@@ -66,77 +51,16 @@ public class SplitterRouteBuilderTest extends CamelRouteCDITest {
 
     @After
     public void reset(){
-        eggResult.reset();
-        pastaResult.reset();
-        meatResult.reset();
-        milkResult.reset();
+        choiceEndpoint.reset();
     }
 
     @Test
-    public void correctInput_CorrectOutputToEggs(@Uri(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws Exception {
-        eggResult.expectedMessageCount(1);
+    public void inputOf4OrderItems_OutputWith4Messages(@Uri(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws Exception {
+        choiceEndpoint.expectedMessageCount(5);
 
-        // Then
-        //sendToEndpoint(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI, order);
         producer.sendBody(order);
-        eggResult.assertIsSatisfied();
-
-        final Exchange exchange = eggResult.getExchanges().get(0);
-        assertThat(exchange).isNotNull();
-
-        OrderToProducer order = exchange.getIn().getBody(OrderToProducer.class);
-        assertThat(order).isNotNull();
-        assertThat(order.getAmount()).isEqualTo(110);
-        assertThat(order.getPartnerId()).isEqualTo(1L);
+        choiceEndpoint.assertIsSatisfied();
+        Exchange exchange = choiceEndpoint.getExchanges().get(0);
+        System.out.println(exchange.getIn().getBody());
     }
-
-    @Test
-    public void correctInput_CorrectOutputToPasta(@Uri(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws Exception {
-
-        pastaResult.expectedMessageCount(1);
-
-        // Then
-        producer.sendBody(order);
-        pastaResult.assertIsSatisfied();
-        final Exchange exchange = pastaResult.getExchanges().get(0);
-        assertThat(exchange).isNotNull();
-
-        OrderToProducer order = exchange.getIn().getBody(OrderToProducer.class);
-        assertThat(order).isNotNull();
-        assertThat(order.getAmount()).isEqualTo(120);
-        assertThat(order.getPartnerId()).isEqualTo(1L);
-    }
-
-    @Test
-    public void correctInput_CorrectOutputToMilk(@Uri(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws InterruptedException {
-        milkResult.expectedMessageCount(1);
-
-        // Then
-        producer.sendBody(order);
-        milkResult.assertIsSatisfied();
-        final Exchange exchange = milkResult.getExchanges().get(0);
-        assertThat(exchange).isNotNull();
-
-        OrderToProducer order = exchange.getIn().getBody(OrderToProducer.class);
-        assertThat(order).isNotNull();
-        assertThat(order.getAmount()).isEqualTo(130);
-        assertThat(order.getPartnerId()).isEqualTo(1L);
-    }
-
-    @Test
-    public void correctInput_CorrectOutputToMeat(@Uri(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI) ProducerTemplate producer) throws InterruptedException {
-        meatResult.expectedMessageCount(1);
-
-        // Then
-        producer.sendBody(order);
-        meatResult.assertIsSatisfied();
-        final Exchange exchange = meatResult.getExchanges().get(0);
-        assertThat(exchange).isNotNull();
-
-        OrderToProducer order = exchange.getIn().getBody(OrderToProducer.class);
-        assertThat(order).isNotNull();
-        assertThat(order.getAmount()).isEqualTo(140);
-        assertThat(order.getPartnerId()).isEqualTo(1L);
-    }
-
 }
