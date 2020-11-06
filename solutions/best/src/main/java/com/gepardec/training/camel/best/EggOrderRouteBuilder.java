@@ -1,11 +1,8 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.config.Endpoints;
 import com.gepardec.training.camel.best.domain.OrderToProducer;
-import com.gepardec.training.camel.commons.endpoint.CamelEndpoint;
 import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.cdi.Uri;
@@ -19,13 +16,9 @@ import javax.inject.Inject;
 @ApplicationScoped
 public final class EggOrderRouteBuilder extends RouteBuilder {
 
-    public static final String ENTRY_SEDA_ENDOINT_URI = "seda:egg_order_entry";
-    public static final String ENTRY_SEDA_ENDOINT_ID = "egg_order_entry";
-
-    public static final String OUTPUT_JMS_ENDPOINT_URI = "jms:queue:eggs?disableReplyTo=true&username=quarkus&password=quarkus&connectionFactory=#JMSConnectionFactory";
-    public static final String OUTPUT_JMS_ENDPOINT_ID = "jms_queue_eggs";
-
-    public static final String ROUTE_ID = "EggOrderRouteBuilder";
+    public static final String ENTRY_SEDA_ENDOINT_URI = "seda://egg_order_entry";
+    public static final String OUTPUT_JMS_ENDPOINT_URI = "jms://queue:eggs?disableReplyTo=true&username=quarkus&password=quarkus&connectionFactory=#JMSConnectionFactory";
+    public static final String OUTPUT_JMS_ENDPOINT_ID = "jms_eggs";
 
     @Inject
     @Uri(ENTRY_SEDA_ENDOINT_URI)
@@ -53,8 +46,7 @@ public final class EggOrderRouteBuilder extends RouteBuilder {
 
         JaxbDataFormat format = new JaxbDataFormat();
 
-        from(entryEndpoint).id(ENTRY_SEDA_ENDOINT_ID)
-                .routeId(ROUTE_ID)
+        from(entryEndpoint).routeId(ENTRY_SEDA_ENDOINT_URI)
                 .filter(body().isInstanceOf(OrderToProducer.class))
                 .marshal(format)
                 .log("Sending ${body} to " + OUTPUT_JMS_ENDPOINT_URI)

@@ -8,10 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public final class MeatOrderRouteBuilder extends RouteBuilder {
 
-    public static final String ENTRY_SEDA_ENDOINT_URI = "seda:meat_order_entry";
-    public static final String ENTRY_SEDA_ENDOINT_ID = "meat_order_entry";
-
-    public static final String ROUTE_ID = "MeatOrderRouteBuilder";
+    public static final String ENTRY_SEDA_ENDOINT_URI = "seda://meat_order_entry";
 
     @Override
     public void configure() {
@@ -20,7 +17,7 @@ public final class MeatOrderRouteBuilder extends RouteBuilder {
                 .handled(true);
 
         from(ENTRY_SEDA_ENDOINT_URI)
-                .routeId(ROUTE_ID)
+                .routeId(ENTRY_SEDA_ENDOINT_URI)
                 .log("MEAT ${body}");
     }
 }

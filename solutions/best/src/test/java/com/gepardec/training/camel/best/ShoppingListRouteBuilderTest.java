@@ -2,8 +2,8 @@ package com.gepardec.training.camel.best;
 
 import com.gepardec.training.camel.best.domain.ShoppingList;
 import com.gepardec.training.camel.best.domain.ShoppingListItem;
-import com.gepardec.training.camel.commons.test.routetest.MockedEndpointId;
-import com.gepardec.training.camel.commons.test.routetest.MockedRouteId;
+import com.gepardec.training.camel.commons.test.routetest.MockableEndpoint;
+import com.gepardec.training.camel.commons.test.routetest.RouteId;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
@@ -19,7 +19,6 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(CamelCdiRunner.class)
 @Beans(classes = ShoppingListRouteBuilder.class)
-@MockedRouteId(ShoppingListRouteBuilder.ROUTE_ID)
 public class ShoppingListRouteBuilderTest {
 
     @Inject
@@ -45,10 +43,9 @@ public class ShoppingListRouteBuilderTest {
 
     @Inject
     @Uri("mock:shopping_result")
-    @MockedEndpointId(ShoppingListRouteBuilder.ENTRY_SEDA_ENDOINT_ID_FROM_JSON)
+    @RouteId(ShoppingListRouteBuilder.ROUTE_ID)
+    @MockableEndpoint(id = ShoppingListRouteBuilder.ENTRY_SEDA_ENDOINT_ID_FROM_JSON)
     private MockEndpoint shoppingResult;
-
-
 
     @Test
     public void writeIntoLogFileTest() throws IOException {

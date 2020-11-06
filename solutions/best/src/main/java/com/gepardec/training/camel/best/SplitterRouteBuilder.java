@@ -14,10 +14,12 @@ import javax.inject.Inject;
 @ApplicationScoped
 public final class SplitterRouteBuilder extends RouteBuilder {
 
-    public static final String ENTRY_SEDA_ENDOINT_URI = "seda:best_splitter_entry";
-    public static final String ENTRY_SEDA_ENDOINT_ID = "best_splitter_entry";
+    public static final String SPLITTER_FROM_ENDOINT_URI = "seda://best_splitter_from";
+    public static final String CHOICE_FROM_ENDOINT_URI = "direct://best_choice_from";
 
-    public static final String ROUTE_ID = "SplitterRouteBuilder";
+    @Inject
+    @Uri(CHOICE_FROM_ENDOINT_URI)
+    Endpoint choiceEndpoint;
 
     @Inject
     @Uri(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
@@ -42,23 +44,22 @@ public final class SplitterRouteBuilder extends RouteBuilder {
                 .handled(true);
 
         //@formatter:off
-        from(ENTRY_SEDA_ENDOINT_URI).id(ENTRY_SEDA_ENDOINT_ID)
-                .routeId(ROUTE_ID)
+
+        from(SPLITTER_FROM_ENDOINT_URI).routeId(SPLITTER_FROM_ENDOINT_URI)
                 .split().method(OrderSplitter.class)
-                .log("! ${body}")
-                .to("direct:choice").id("bla");
+                    .to(choiceEndpoint)
+                .end();
 
-
-        from("direct:choice").id("bla").routeId("Blubb").log("!! ${body}")
+        from(choiceEndpoint).routeId(CHOICE_FROM_ENDOINT_URI)
                 .choice()
                     .when(hasItemCode(OrderItem.EGG))
-                        .to(eggEndpoint).id(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
+                        .to(eggEndpoint)
                     .when(hasItemCode(OrderItem.PASTA))
-                        .to(pastaEndpoint).id(PastaOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
+                        .to(pastaEndpoint)
                     .when(hasItemCode(OrderItem.MILK))
-                        .to(milkEndpoint).id(MilkOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
+                        .to(milkEndpoint)
                     .when(hasItemCode(OrderItem.MEAT))
-                        .to(meatEndpoint).id(MeatOrderRouteBuilder.ENTRY_SEDA_ENDOINT_ID)
+                        .to(meatEndpoint)
                 .otherwise()
                     .log("ERROR...")
                 .end();

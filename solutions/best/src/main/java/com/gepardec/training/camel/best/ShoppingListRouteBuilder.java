@@ -11,10 +11,10 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class ShoppingListRouteBuilder extends RouteBuilder {
 
-    public static final String ENTRY_SEDA_ENDOINT_URI = "seda:best_shoppingList_entry";
+    public static final String ENTRY_SEDA_ENDOINT_URI = "seda://best_shoppingList_entry";
     public static final String ENTRY_SEDA_ENDOINT_ID = "best_shoppingList_entry";
 
-    public static final String ENTRY_SEDA_ENDOINT_URI_FROM_JSON = "seda:best_shoppingList_json_entry";
+    public static final String ENTRY_SEDA_ENDOINT_URI_FROM_JSON = "seda://best_shoppingList_json_entry";
     public static final String ENTRY_SEDA_ENDOINT_ID_FROM_JSON = "best_shoppingList_json_entry";
 
     public static final String ROUTE_ID = "ShoppingListRouteBuilder";
@@ -31,13 +31,13 @@ public class ShoppingListRouteBuilder extends RouteBuilder {
                 .routeId(ROUTE_ID)
                 .marshal().json()
                 //file will be overwritten,can be avoided with "fileExists=append"
-                .to("file:src/test/resources/logs?filename=logfile.txt");
+                .to("file://src/test/resources/logs?filename=logfile.txt");
 
 
         from("direct:triggerFileRoute")
                 .routeId("triggerFileRoute")
                 .log("test")
-                .to("file:src/test/resources/logs?filename=logfile.txt");
+                .to("file://src/test/resources/logs?filename=logfile.txt");
 
         from("file:src/test/resources/logs?filename=logfile.txt")
                 .routeId(ROUTE_ID_FROM_JSON)

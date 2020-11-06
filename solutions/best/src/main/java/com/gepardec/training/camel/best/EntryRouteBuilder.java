@@ -1,6 +1,5 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.config.Endpoints;
 import com.gepardec.training.camel.best.domain.Order;
 import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
 import org.apache.camel.Exchange;
@@ -33,7 +32,7 @@ public final class EntryRouteBuilder extends RouteBuilder {
                 .consumes(MediaType.APPLICATION_JSON)
                 .type(Order.class)
                 .id("best_rest")
-                .route().to(SplitterRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
+                .route().to(SplitterRouteBuilder.SPLITTER_FROM_ENDOINT_URI)
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(Response.Status.ACCEPTED.getStatusCode()))
                 .endRest();
 

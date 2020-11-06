@@ -1,7 +1,6 @@
 package com.gepardec.training.camel.best;
 
 import com.gepardec.training.camel.best.config.ConfigurationUtils;
-import com.gepardec.training.camel.best.config.Endpoints;
 import com.gepardec.training.camel.commons.test.integrationtest.CamelIntegrationTest;
 import com.gepardec.training.camel.commons.test.integrationtest.RestServiceTestSupport;
 import org.apache.camel.Exchange;
@@ -27,7 +26,7 @@ public class EggOrderRouteBuilderIT extends CamelIntegrationTest {
     public void wrongInputJson_NothingInQueue() throws IOException {
         String json = getFileAsString(MILK_JSON_FILE_PATH);
         RestServiceTestSupport.callPost("", json, 202);
-        pollFromEndpoint(Endpoints.EGG_ORDER_JMS_ENDPOINT.endpointUri(), 2000);
+        pollFromEndpoint(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI, 2000);
     }
 
     @Test

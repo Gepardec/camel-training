@@ -1,7 +1,6 @@
 package com.gepardec.training.camel.commons.test.integrationtest;
 
 
-import com.gepardec.training.camel.commons.endpoint.CamelEndpoint;
 import com.gepardec.training.camel.commons.test.TestBase;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ConsumerTemplate;
@@ -45,16 +44,6 @@ public class CamelIntegrationTest extends TestBase {
     }
 
     /**
-     * Sends message and headers to the endpoint. If it is a message queue endpoint, the message will be sent in the real queue.
-     */
-    protected void sendToEndpoint(final String endpoint, final Object body, final Map<String, Object> headers) throws Exception {
-        ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
-        producerTemplate.sendBodyAndHeaders(endpoint, body, headers);
-        producerTemplate.stop();
-    }
-
-
-    /**
      * Polls message from the endpoint. If it is a message queue endpoint, the message will be polled from the real queue.
      */
     protected Exchange pollFromEndpoint(final String endpoint) {
@@ -68,19 +57,6 @@ public class CamelIntegrationTest extends TestBase {
         return pollFromEndpoint(endpoint, 5000);
     }
 
-    /**
-     * Polls from endpoint. It waits 3 seconds for result. If there is nothing to poll within 3 seconds, <tt>null</tt> is returned.
-     */
-    protected Exchange pollFromEndpoint(final CamelEndpoint endpoint) {
-        return pollFromEndpoint(endpoint.endpointUri(), 3000);
-    }
-
-    /**
-     * Polls from endpoint. It waits given timeout in milliseconds for result. If there is nothing to poll within timeout, <tt>null</tt> is returned.
-     */
-    protected Exchange pollFromEndpoint(final CamelEndpoint endpoint, final long timeOut) {
-        return pollFromEndpoint(endpoint.endpointUri(), timeOut);
-    }
 
 
     /**
@@ -111,9 +87,4 @@ public class CamelIntegrationTest extends TestBase {
     protected void clearEndpointQueue(final String endpoint) {
         clearEndpointQueue(endpoint, 2000);
     }
-
-    protected void clearEndpointQueue(final CamelEndpoint endpoint) {
-        clearEndpointQueue(endpoint.endpointUri());
-    }
-
 }

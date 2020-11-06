@@ -3,8 +3,8 @@ package com.gepardec.training.camel.best;
 import com.gepardec.training.camel.best.domain.OrderItem;
 import com.gepardec.training.camel.best.domain.OrderToProducer;
 import com.gepardec.training.camel.commons.test.routetest.CamelRouteCDITest;
-import com.gepardec.training.camel.commons.test.routetest.MockedRouteId;
-import com.gepardec.training.camel.commons.test.routetest.MockedEndpointId;
+import com.gepardec.training.camel.commons.test.routetest.RouteId;
+import com.gepardec.training.camel.commons.test.routetest.MockableEndpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.cdi.Uri;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -19,12 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(CamelCdiRunner.class)
 @Beans(classes = EggOrderRouteBuilder.class)
-@MockedRouteId(EggOrderRouteBuilder.ROUTE_ID)
 public class EggOrderRouteBuilderTest extends CamelRouteCDITest {
 
     @Inject
     @Uri("mock:result")
-    @MockedEndpointId(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_ID)
+    @MockableEndpoint(id = EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_ID)
+    @RouteId(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
     private MockEndpoint result;
 
     @Test

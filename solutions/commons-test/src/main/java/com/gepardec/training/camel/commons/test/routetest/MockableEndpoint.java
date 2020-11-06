@@ -4,6 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MockedEndpointId {
-    String value();
+public @interface MockableEndpoint {
+    String value() default "";
+    String id() default "";
 }
