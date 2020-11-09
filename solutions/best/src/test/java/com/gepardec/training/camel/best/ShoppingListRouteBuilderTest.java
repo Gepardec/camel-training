@@ -1,7 +1,7 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.domain.ShoppingList;
-import com.gepardec.training.camel.best.domain.ShoppingListItem;
+import com.gepardec.training.camel.commons.domain.ShoppingList;
+import com.gepardec.training.camel.commons.domain.ShoppingListItem;
 import com.gepardec.training.camel.commons.test.routetest.MockableEndpoint;
 import com.gepardec.training.camel.commons.test.routetest.RouteId;
 import org.apache.camel.CamelContext;

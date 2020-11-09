@@ -6,7 +6,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.component.jackson.JacksonDataFormat;
 
-import com.gepardec.training.camel.best.domain.Order;
+import com.gepardec.training.camel.commons.domain.Order;
 
 
 public class MyRoutes extends AdviceWithRouteBuilder {

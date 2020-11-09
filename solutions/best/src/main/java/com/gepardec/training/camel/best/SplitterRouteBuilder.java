@@ -1,7 +1,6 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.domain.OrderItem;
-import com.gepardec.training.camel.best.misc.OrderSplitter;
+import com.gepardec.training.camel.commons.domain.OrderItem;
 import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Predicate;

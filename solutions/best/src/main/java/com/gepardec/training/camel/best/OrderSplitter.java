@@ -1,10 +1,8 @@
-package com.gepardec.training.camel.best.misc;
+package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.config.ExchangeHeaders;
-import com.gepardec.training.camel.best.domain.Order;
-import com.gepardec.training.camel.best.domain.OrderItem;
-import com.gepardec.training.camel.best.domain.OrderToProducer;
-import com.sun.org.apache.xpath.internal.operations.Or;
+
+import com.gepardec.training.camel.commons.domain.Order;
+import com.gepardec.training.camel.commons.domain.OrderToProducer;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.gepardec.training.camel.best.domain;
+package com.gepardec.training.camel.commons.domain;
 
 public class ShoppingListItem {
     private int code;

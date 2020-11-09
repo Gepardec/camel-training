@@ -1,6 +1,6 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.domain.ShoppingList;
+import com.gepardec.training.camel.commons.domain.ShoppingList;
 import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jackson.JacksonDataFormat;

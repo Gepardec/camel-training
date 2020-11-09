@@ -1,8 +1,8 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.domain.Order;
-import com.gepardec.training.camel.best.domain.OrderItem;
-import com.gepardec.training.camel.best.domain.OrderToProducer;
+import com.gepardec.training.camel.commons.domain.Order;
+import com.gepardec.training.camel.commons.domain.OrderItem;
+import com.gepardec.training.camel.commons.domain.OrderToProducer;
 import com.gepardec.training.camel.commons.test.routetest.CamelRouteCDITest;
 import com.gepardec.training.camel.commons.test.routetest.MockableEndpoint;
 import com.gepardec.training.camel.commons.test.routetest.RouteId;

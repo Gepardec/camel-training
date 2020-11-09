@@ -1,4 +1,4 @@
-package com.gepardec.training.camel.best.domain;
+package com.gepardec.training.camel.commons.domain;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

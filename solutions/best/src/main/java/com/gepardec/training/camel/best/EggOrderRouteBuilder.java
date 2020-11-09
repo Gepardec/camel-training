@@ -1,6 +1,6 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.domain.OrderToProducer;
+import com.gepardec.training.camel.commons.domain.OrderToProducer;
 import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.Endpoint;
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 public final class EggOrderRouteBuilder extends RouteBuilder {
 
     public static final String ENTRY_SEDA_ENDOINT_URI = "seda://egg_order_entry";
-    public static final String OUTPUT_JMS_ENDPOINT_URI = "jms://queue:eggs?disableReplyTo=true&username=quarkus&password=quarkus&connectionFactory=#JMSConnectionFactory";
+    public static final String OUTPUT_JMS_ENDPOINT_URI = "jms://queue:eggs?disableReplyTo=true&username=camel&password=camel&connectionFactory=#JMSConnectionFactory";
     public static final String OUTPUT_JMS_ENDPOINT_ID = "jms_eggs";
 
     @Inject
@@ -27,16 +27,6 @@ public final class EggOrderRouteBuilder extends RouteBuilder {
     @Inject
     @Uri(OUTPUT_JMS_ENDPOINT_URI)
     private Endpoint jmsEndpoint;
-
-    @Bean
-    public JmsComponent jms() {
-        ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory();
-        cf.setBrokerURL("tcp://localhost:61616");
-        cf.setUserName("quarkus");
-        cf.setPassword("quarkus");
-
-        return JmsComponent.jmsComponentAutoAcknowledge(cf);
-    }
 
     @Override
     public void configure() {

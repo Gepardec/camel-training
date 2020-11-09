@@ -1,6 +1,7 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.config.ConfigurationUtils;
+import com.gepardec.training.camel.commons.config.ConfigurationUtils;
+import com.gepardec.training.camel.commons.misc.ConfigurationProducer;
 import com.gepardec.training.camel.commons.test.integrationtest.CamelIntegrationTest;
 import com.gepardec.training.camel.commons.test.integrationtest.RestServiceTestSupport;
 import org.apache.camel.Exchange;
@@ -18,7 +19,7 @@ public class EggOrderRouteBuilderIT extends CamelIntegrationTest {
 
     @Before
     public void setup(){
-        camelContext.getRegistry().bind("JMSConnectionFactory", ConfigurationUtils.getJmsConnectionFactory("tcp://localhost:61616", "quarkus", "quarkus"));
+        camelContext.getRegistry().bind("JMSConnectionFactory", new ConfigurationProducer().createConnectionFactory());
         clearEndpointQueue(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
     }
 

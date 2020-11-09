@@ -1,4 +1,4 @@
-package com.gepardec.training.camel.best.domain;
+package com.gepardec.training.camel.commons.domain;
 
 import java.io.Serializable;
 import java.util.List;

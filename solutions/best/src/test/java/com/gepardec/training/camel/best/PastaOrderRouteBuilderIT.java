@@ -1,7 +1,7 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.config.DbConnection;
 import com.gepardec.training.camel.best.db.CommonOperations;
+import com.gepardec.training.camel.commons.config.DbConnection;
 import com.gepardec.training.camel.commons.test.integrationtest.CamelIntegrationTest;
 import com.gepardec.training.camel.commons.test.integrationtest.RestServiceTestSupport;
 import com.ninja_squad.dbsetup.DbSetup;

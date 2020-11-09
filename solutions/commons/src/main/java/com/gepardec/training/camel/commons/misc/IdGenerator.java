@@ -1,4 +1,4 @@
-package com.gepardec.training.camel.best.misc;
+package com.gepardec.training.camel.commons.misc;
 
 import java.util.UUID;
 

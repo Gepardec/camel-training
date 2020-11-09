@@ -1,4 +1,4 @@
-package com.gepardec.training.camel.best.config;
+package com.gepardec.training.camel.commons.config;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
