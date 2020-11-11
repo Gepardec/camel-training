@@ -1,7 +1,6 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.commons.config.ConfigurationUtils;
-import com.gepardec.training.camel.commons.misc.ConfigurationProducer;
+import com.gepardec.training.camel.commons.config.ConfigurationProducer;
 import com.gepardec.training.camel.commons.test.integrationtest.CamelIntegrationTest;
 import com.gepardec.training.camel.commons.test.integrationtest.RestServiceTestSupport;
 import org.apache.camel.Exchange;

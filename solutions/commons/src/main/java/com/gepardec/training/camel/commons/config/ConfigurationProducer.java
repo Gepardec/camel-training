@@ -1,7 +1,8 @@
-package com.gepardec.training.camel.commons.misc;
+package com.gepardec.training.camel.commons.config;
 
 import com.gepardec.training.camel.commons.config.ConfigurationUtils;
 import com.gepardec.training.camel.commons.config.DbConnection;
+import com.gepardec.training.camel.commons.misc.IdGenerator;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.component.jms.JmsComponent;
 import org.springframework.context.annotation.Bean;
