@@ -3,7 +3,7 @@ Transforming and Processing Data
 
 Prerequisites: Exercise 06
 
-Transform the order in Jason-Format to a Java object, then change the partner-ID to another value.
+Transform the order in Json-Format to a Java object, then change the partner-ID to another value.
 Finally transform the Java object back to a File.
 
 Use String orderIn = "{\"partnerId\": 1, \"items\": [{ \"code\": 1, \"amount\": 110 }]}";
