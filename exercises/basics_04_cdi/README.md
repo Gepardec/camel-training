@@ -15,7 +15,7 @@ mvn archetype:generate \
 Then run
 
 ``` 
-cd simple-cdi
+cd best
 mvn install
 mvn camel:run
 ``` 
