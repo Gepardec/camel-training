@@ -16,6 +16,7 @@
         <module>best</module>
         <module>simple-cdi</module>
         <module>simple-routes</module>
+        <module>playground-best</module>
     </modules>
 
     <properties>
