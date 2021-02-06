@@ -1,7 +1,7 @@
 Test Routes in Spring Context
 =============================
 
-Prerequisites: Excercise basics_02_1_java_dsl
+Prerequisites: Excercise 02_1
 
 Step A)
 Copy the Unit Test `SimpleTest.java` into your project and fix the test.
