@@ -30,4 +30,4 @@ In order to add that route to the camel context, add a <package> element to the 
 ...
 ```
 
-Test the routes
+Test the routes manually

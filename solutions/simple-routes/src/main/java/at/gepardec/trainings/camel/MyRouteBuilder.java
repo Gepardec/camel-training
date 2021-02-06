@@ -13,6 +13,9 @@ public class MyRouteBuilder extends RouteBuilder {
     public void configure() {
 
         from("file:target/messages/others?noop=true")
+        .to("direct:infile");
+        
+        from("direct:infile")
         .to("file:target/messages/somewhere");
     }
 
