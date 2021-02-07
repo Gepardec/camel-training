@@ -26,14 +26,4 @@ public final class ConfigurationUtils {
         }
 
     }
-
-    public static ActiveMQConnectionFactory getJmsConnectionFactory(String brokerUrl, String username, String password) {
-
-        ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory();
-        cf.setBrokerURL(brokerUrl);
-        cf.setUserName(username);
-        cf.setPassword(password);
-
-        return cf;
-    }
 }

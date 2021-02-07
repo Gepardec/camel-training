@@ -35,11 +35,11 @@ public final class EggOrderRouteBuilder extends RouteBuilder {
                 .process(new ExceptionLoggingProcessor())
                 .handled(true);
 
-        JaxbDataFormat format = new JaxbDataFormat();
+        JaxbDataFormat xml = new JaxbDataFormat();
 
         from(entryEndpoint).routeId(ENTRY_SEDA_ENDOINT_URI)
                 .filter(body().isInstanceOf(OrderToProducer.class))
-                .marshal(format)
+                .marshal(xml)
                 .log("Sending ${body} to " + OUTPUT_JMS_ENDPOINT_URI)
                 .setExchangePattern(ExchangePattern.InOnly)
                 .to(jmsEndpoint).id(OUTPUT_JMS_ENDPOINT_ID);

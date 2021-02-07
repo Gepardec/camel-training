@@ -17,11 +17,6 @@ import com.gepardec.training.camel.commons.misc.IdGenerator;
 @ApplicationScoped
 public class ConfigurationProducer {
 
-    @Produces
-    @Named("JMSConnectionFactory")
-    public ActiveMQConnectionFactory createConnectionFactory() {
-        return ConfigurationUtils.getJmsConnectionFactory("tcp://localhost:61616", "camel", "camel");
-    }
 
     @Produces
     @Named("idGenerator")
@@ -38,5 +33,16 @@ public class ConfigurationProducer {
     @Bean
     public JmsComponent jms() {
         return JmsComponent.jmsComponentAutoAcknowledge(createConnectionFactory());
+    }
+    
+    @Produces
+    @Named("JMSConnectionFactory")
+    public ActiveMQConnectionFactory createConnectionFactory() {
+        ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory();
+		cf.setBrokerURL("tcp://localhost:61616");
+		cf.setUserName("camel");
+		cf.setPassword("camel");
+		
+		return cf;
     }
 }
