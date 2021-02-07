@@ -35,8 +35,6 @@ public class ConfigurationProducer {
         return JmsComponent.jmsComponentAutoAcknowledge(createConnectionFactory());
     }
     
-    @Produces
-    @Named("JMSConnectionFactory")
     public ActiveMQConnectionFactory createConnectionFactory() {
         ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory();
 		cf.setBrokerURL("tcp://localhost:61616");

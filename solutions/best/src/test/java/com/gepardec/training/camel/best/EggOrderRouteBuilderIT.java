@@ -18,7 +18,7 @@ public class EggOrderRouteBuilderIT extends CamelIntegrationTest {
 
     @Before
     public void setup(){
-        camelContext.getRegistry().bind("JMSConnectionFactory", new ConfigurationProducer().createConnectionFactory());
+        camelContext.getRegistry().bind("jms", new ConfigurationProducer().jms());
         clearEndpointQueue(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
     }
 
