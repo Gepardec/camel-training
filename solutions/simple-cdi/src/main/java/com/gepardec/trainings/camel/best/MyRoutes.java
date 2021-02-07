@@ -5,14 +5,14 @@ import javax.inject.Inject;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.camel.builder.AdviceWithRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.cdi.Uri;
 import org.apache.camel.component.jackson.JacksonDataFormat;
 
 import com.gepardec.training.camel.commons.domain.Order;
 
 
-public class MyRoutes extends AdviceWithRouteBuilder {
+public class MyRoutes extends RouteBuilder {
 
 	public static final String DIRECT_BEAN_OTHER = "direct:beanOther";
 	public static final String OTHER_BEAN_ROUTE = "OTHER_BEAN_ROUTE";
@@ -33,7 +33,7 @@ public class MyRoutes extends AdviceWithRouteBuilder {
     public void configure() {
     	JacksonDataFormat orderFormat = new JacksonDataFormat(Order.class);
 
-        from(URL_FILE_ORDERS_IN)
+        from(URL_FILE_ORDERS_IN).routeId(URL_FILE_ORDERS_IN)
         .to(fromEndpoint);
         
         from(fromEndpoint)        
