@@ -4,6 +4,7 @@ import com.gepardec.training.camel.commons.domain.OrderToProducer;
 import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.Endpoint;
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.cdi.Uri;
 import org.apache.camel.component.jms.JmsComponent;
@@ -17,7 +18,7 @@ import javax.inject.Inject;
 public final class EggOrderRouteBuilder extends RouteBuilder {
 
     public static final String ENTRY_SEDA_ENDOINT_URI = "seda://egg_order_entry";
-    public static final String OUTPUT_JMS_ENDPOINT_URI = "jms://queue:eggs?disableReplyTo=true&username=camel&password=camel&connectionFactory=#JMSConnectionFactory";
+    public static final String OUTPUT_JMS_ENDPOINT_URI = "jms://queue:eggs";
     public static final String OUTPUT_JMS_ENDPOINT_ID = "jms_eggs";
 
     @Inject
@@ -40,6 +41,7 @@ public final class EggOrderRouteBuilder extends RouteBuilder {
                 .filter(body().isInstanceOf(OrderToProducer.class))
                 .marshal(format)
                 .log("Sending ${body} to " + OUTPUT_JMS_ENDPOINT_URI)
+                .setExchangePattern(ExchangePattern.InOnly)
                 .to(jmsEndpoint).id(OUTPUT_JMS_ENDPOINT_ID);
     }
 }
