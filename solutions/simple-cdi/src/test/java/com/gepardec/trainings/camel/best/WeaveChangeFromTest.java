@@ -18,17 +18,14 @@ import org.junit.runner.RunWith;
 @RunWith(CamelCdiRunner.class)
 public class WeaveChangeFromTest extends CamelTestSupport {
 
-    @Inject
+	@Inject
+	@Uri("direct:fromMock")
+	private Endpoint fromMock;
+
+	@Inject
     @Uri("mock:result")
     MockEndpoint resultMock;
 
-    @Inject
-    @Uri("direct:testIn")
-    private Endpoint mockDirectIn;
-
-    @Inject
-    @Uri(MyRoutes.DIRECT_ORDER_IN)
-    private Endpoint fromEndpoint;
 
 	void advice(@Observes CamelContextStartedEvent event, ModelCamelContext context) throws Exception {
 		AdviceWith.adviceWith(context.getRouteDefinition(MyRoutes.DIRECT_BEAN_OTHER), context, new AdviceWithRouteBuilder() {
@@ -40,10 +37,9 @@ public class WeaveChangeFromTest extends CamelTestSupport {
 		AdviceWith.adviceWith(context.getRouteDefinition(MyRoutes.URL_FILE_ORDERS_IN), context, new AdviceWithRouteBuilder() {
 			@Override
 			public void configure() {
-				replaceFromWith(mockDirectIn);
+				replaceFromWith(fromMock);
 			}
 		});
-		
 	}
 
 	@Test
@@ -54,7 +50,7 @@ public class WeaveChangeFromTest extends CamelTestSupport {
 		resultMock.expectedMessageCount(1);
 		resultMock.expectedBodiesReceived(orderExpected);
 
-		template.sendBody(mockDirectIn, orderIn);
+		template.sendBody(fromMock, orderIn);
 		resultMock.assertIsSatisfied();
 	}
 
