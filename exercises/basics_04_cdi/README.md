@@ -8,7 +8,7 @@ Run
 mvn archetype:generate \
   -DarchetypeGroupId=org.apache.camel.archetypes \
   -DarchetypeArtifactId=camel-archetype-cdi \
-  -DarchetypeVersion=3.4.2 \
+  -DarchetypeVersion=3.7.1 \
   -DgroupId=com.gepardec.trainings.camel.best \
   -DartifactId=best
 ``` 

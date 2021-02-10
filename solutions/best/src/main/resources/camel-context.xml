@@ -3,4 +3,9 @@
 <camelContext id="cdi-camel-xml"
               xmlns="http://camel.apache.org/schema/spring"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://camel.apache.org/schema/spring               http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <route id="timer_route1">
+        <description>Route that shows running camel</description>
+        <from uri="timer:forLogging?period=5000"/>
+        <to uri="log:vom_xml"/>
+    </route>
 </camelContext>

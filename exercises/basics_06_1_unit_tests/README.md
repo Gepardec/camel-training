@@ -21,7 +21,7 @@ Add the following dependency to pom.xml:
 
 Copy the route `MyRoutes.java` into your project.
 
-Add a unit test with the following test an route builder:
+Add a unit test with the following test and route builder:
 
 ```
     @Test
@@ -77,4 +77,6 @@ Simplify the test by using Advice and weave:
 		resultMock.assertIsSatisfied();
 	}
 
-``` 
+```
+
+Optional: Try also to replace the from-endpoint ("file:src/orders") from the main route in the test by a direct endpoint.
