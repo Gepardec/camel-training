@@ -8,7 +8,7 @@ Run
 mvn archetype:generate \
   -DarchetypeGroupId=org.apache.camel.archetypes \
   -DarchetypeArtifactId=camel-archetype-spring \
-  -DarchetypeVersion=3.4.2 \
+  -DarchetypeVersion=4.4.0 \
   -DgroupId=at.gepardec.trainings.camel \
   -DartifactId=simple-routes
 ``` 
