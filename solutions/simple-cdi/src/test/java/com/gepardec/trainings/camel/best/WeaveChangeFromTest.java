@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import org.apache.camel.Endpoint;
 import org.apache.camel.builder.AdviceWith;
 import org.apache.camel.builder.AdviceWithRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.cdi.Uri;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.model.ModelCamelContext;
@@ -26,21 +27,23 @@ public class WeaveChangeFromTest extends CamelTestSupport {
     @Uri("mock:result")
     MockEndpoint resultMock;
 
-
+	
 	void advice(@Observes CamelContextStartedEvent event, ModelCamelContext context) throws Exception {
+		
 		AdviceWith.adviceWith(context.getRouteDefinition(MyRoutes.DIRECT_BEAN_OTHER), context, new AdviceWithRouteBuilder() {
 			@Override
 			public void configure() {
-				weaveByToUri(MyRoutes.URL_FILE_ORDERS_OUT).replace().to(resultMock);
+				weaveByToUri(MyRoutes.URL_FILE_ORDERS_OUT).replace().to("mock:result");
 			}
 		});
 		AdviceWith.adviceWith(context.getRouteDefinition(MyRoutes.URL_FILE_ORDERS_IN), context, new AdviceWithRouteBuilder() {
 			@Override
 			public void configure() {
-				replaceFromWith(fromMock);
+				replaceFromWith("direct:fromMock");
 			}
 		});
 	}
+
 
 	@Test
 	public void when_order_in_orders_message_is_in_processed() throws InterruptedException {
