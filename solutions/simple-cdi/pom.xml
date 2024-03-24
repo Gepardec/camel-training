@@ -19,7 +19,7 @@
     <log4j2-version>2.13.3</log4j2-version>
     <cdi-api-version>2.0</cdi-api-version>
     <weld3-version>3.0.5.Final</weld3-version>
-    <camel-version>3.7.1</camel-version>
+    <camel-version>3.22.1</camel-version>
   </properties>
 
   <dependencyManagement>
@@ -58,6 +58,10 @@
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
+      <artifactId>camel-cdi-main</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
       <artifactId>camel-core</artifactId>
     </dependency>
 
@@ -86,15 +90,6 @@
       <artifactId>camel-jackson</artifactId>
     </dependency>
 
-
-    <!-- logging 
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j-impl</artifactId>
-      <scope>runtime</scope>
-      <version>${log4j2-version}</version>
-    </dependency>
--->
     <!-- testing -->
     <dependency>
       <groupId>org.apache.camel</groupId>
