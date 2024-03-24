@@ -30,7 +30,8 @@ public class EggOrderRouteBuilderIT extends CamelIntegrationTest {
     }
 
     @Test
-    public void correctInputJson_CorrectJavaObjectIsCreated() throws IOException {
+    public void correctInputJson_CorrectJavaObjectIsCreated() throws IOException, InterruptedException {
+    	Thread.sleep(1000); // Some Timing problem wit integrationtests
         String json = getFileAsString(EGGS_JSON_FILE_PATH);
         RestServiceTestSupport.callPost("", json, 202);
         Exchange exchange = pollFromEndpoint(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
