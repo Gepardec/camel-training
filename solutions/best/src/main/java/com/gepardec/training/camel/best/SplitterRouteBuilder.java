@@ -46,7 +46,7 @@ public final class SplitterRouteBuilder extends RouteBuilder {
 
         from(SPLITTER_FROM_ENDOINT_URI).routeId(SPLITTER_FROM_ENDOINT_URI)
                 .split().method(OrderSplitter.class)
-                    .log(simple("${header.CamelSplitIndex}").getText())
+                    .log(simple("${header.CamelSplitIndex}").toString())
                     .to(choiceEndpoint)
                 .end();
 

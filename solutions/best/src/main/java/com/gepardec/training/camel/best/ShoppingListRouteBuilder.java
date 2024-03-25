@@ -12,7 +12,6 @@ import javax.enterprise.context.ApplicationScoped;
 public class ShoppingListRouteBuilder extends RouteBuilder {
 
     public static final String ENTRY_SEDA_ENDOINT_URI = "seda://best_shoppingList_entry";
-    public static final String ENTRY_SEDA_ENDOINT_ID = "best_shoppingList_entry";
 
     public static final String ENTRY_SEDA_ENDOINT_URI_FROM_JSON = "seda://best_shoppingList_json_entry";
     public static final String ENTRY_SEDA_ENDOINT_ID_FROM_JSON = "best_shoppingList_json_entry";
@@ -27,7 +26,7 @@ public class ShoppingListRouteBuilder extends RouteBuilder {
                 .process(new ExceptionLoggingProcessor())
                 .handled(true);
 
-        from(ENTRY_SEDA_ENDOINT_URI).id(ENTRY_SEDA_ENDOINT_ID)
+        from(ENTRY_SEDA_ENDOINT_URI)
                 .routeId(ROUTE_ID)
                 .marshal().json()
                 //file will be overwritten,can be avoided with "fileExists=append"

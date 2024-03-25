@@ -27,9 +27,11 @@ public final class EntryRouteBuilder extends RouteBuilder {
                 .consumes(MediaType.APPLICATION_JSON)
                 .type(Order.class)
                 .id("best_rest")
-                .route().to(SplitterRouteBuilder.SPLITTER_FROM_ENDOINT_URI)
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(Response.Status.ACCEPTED.getStatusCode()))
-                .endRest();
+                .to("direct:rest_input");
+        
+        from("direct:rest_input")
+            .to(SplitterRouteBuilder.SPLITTER_FROM_ENDOINT_URI)
+            .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(Response.Status.ACCEPTED.getStatusCode()));
 
     }
 }

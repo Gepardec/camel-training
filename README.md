@@ -3,6 +3,14 @@ The project for Camel Training
 
 #### Technical hints
 
+**Compile**
+
+```
+cd solutions
+mvn clean install
+cd ..
+```
+
 **Artemis Queue**
 
 Open new command-line and run
@@ -36,5 +44,5 @@ mvn camel:run
 In separate command-line run
 ```
 cd solutions/best
-mvn -Dmaven.failsafe.skip=false failsafe:integration-test
+mvn -Dmaven.failsafe.skip=false -DskipTests verify
 ```
