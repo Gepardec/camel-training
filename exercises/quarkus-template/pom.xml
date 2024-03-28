@@ -75,15 +75,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.camel.quarkus</groupId>
-			<artifactId>camel-quarkus-jackson</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel.quarkus</groupId>
-			<artifactId>camel-quarkus-rest</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel.quarkus</groupId>
 			<artifactId>camel-quarkus-direct</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel.quarkus</groupId>
+			<artifactId>camel-quarkus-file</artifactId>
 		</dependency>
 
 		<!-- test dependencies -->
@@ -175,34 +171,6 @@
 					<version>${maven-jar-plugin.version}</version>
 				</plugin>
 
-				<plugin>
-					<groupId>com.mycila</groupId>
-					<artifactId>license-maven-plugin</artifactId>
-					<version>${license-maven-plugin.version}</version>
-					<configuration>
-						<failIfUnknown>true</failIfUnknown>
-						<header>${maven.multiModuleProjectDirectory}/header.txt</header>
-						<excludes>
-							<exclude>**/*.adoc</exclude>
-							<exclude>**/*.txt</exclude>
-							<exclude>**/LICENSE.txt</exclude>
-							<exclude>**/LICENSE</exclude>
-							<exclude>**/NOTICE.txt</exclude>
-							<exclude>**/NOTICE</exclude>
-							<exclude>**/README</exclude>
-							<exclude>**/pom.xml.versionsBackup</exclude>
-						</excludes>
-						<mapping>
-							<java>SLASHSTAR_STYLE</java>
-							<properties>CAMEL_PROPERTIES_STYLE</properties>
-							<kt>SLASHSTAR_STYLE</kt>
-						</mapping>
-						<headerDefinitions>
-							<headerDefinition>
-								${maven.multiModuleProjectDirectory}/license-properties-headerdefinition.xml</headerDefinition>
-						</headerDefinitions>
-					</configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 
@@ -332,35 +300,6 @@
 							<version>${maven-jar-plugin.version}</version>
 						</plugin>
 
-						<plugin>
-							<groupId>com.mycila</groupId>
-							<artifactId>license-maven-plugin</artifactId>
-							<version>${license-maven-plugin.version}</version>
-							<configuration>
-								<failIfUnknown>true</failIfUnknown>
-								<header>
-									${maven.multiModuleProjectDirectory}/header.txt</header>
-								<excludes>
-									<exclude>**/*.adoc</exclude>
-									<exclude>**/*.txt</exclude>
-									<exclude>**/LICENSE.txt</exclude>
-									<exclude>**/LICENSE</exclude>
-									<exclude>**/NOTICE.txt</exclude>
-									<exclude>**/NOTICE</exclude>
-									<exclude>**/README</exclude>
-									<exclude>**/pom.xml.versionsBackup</exclude>
-								</excludes>
-								<mapping>
-									<java>SLASHSTAR_STYLE</java>
-									<properties>CAMEL_PROPERTIES_STYLE</properties>
-									<kt>SLASHSTAR_STYLE</kt>
-								</mapping>
-								<headerDefinitions>
-									<headerDefinition>
-										${maven.multiModuleProjectDirectory}/license-properties-headerdefinition.xml</headerDefinition>
-								</headerDefinitions>
-							</configuration>
-						</plugin>
 					</plugins>
 				</pluginManagement>
 
