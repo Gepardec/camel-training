@@ -17,7 +17,7 @@ public class MyRoutes extends RouteBuilder {
 	public static final String DIRECT_BEAN_OTHER = "direct:beanOther";
 	public static final String OTHER_BEAN_ROUTE = "OTHER_BEAN_ROUTE";
 	public static final String DIRECT_ORDER_IN = "direct:order_in";
-	public static final String URL_FILE_ORDERS_IN = "file:src/orders";
+	public static final String URL_FILE_ORDERS_IN = "file:target/orders/in";
 	public static final String URL_FILE_ORDERS_OUT = "file:target/orders/processed";
 
     @Inject
