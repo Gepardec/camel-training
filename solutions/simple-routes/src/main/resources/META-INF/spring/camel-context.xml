@@ -1,35 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Configures the Camel Context-->
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:camel="http://camel.apache.org/schema/spring"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd             http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd  ">
 
-    <!-- let Spring do its IoC stuff in this package -->
-    <context:component-scan base-package="at.gepardec.trainings.camel"/>
-    <camelContext id="camelContext-36a8d3ba-2a31-44cc-ae01-1e9a04f7b88d" xmlns="http://camel.apache.org/schema/spring">
-        <!-- here is a sample which processes the input files
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <camelContext xmlns="http://camel.apache.org/schema/spring">
+    <package>at.gepardec.trainings.camel</package>
+    <!-- here is a sample which processes the input files
          (leaving them in place - see the 'noop' flag)
          then performs content based routing on the message using XPath -->
-        <package>at.gepardec.trainings.camel</package>
-        <route id="_route1">
-            <from uri="file:src/data?noop=true"/>
-            <choice>
-                <when>
-                    <xpath>/person/city = 'London'</xpath>
-                    <log message="UK message"/>
-                    <to uri="file:target/messages/uk"/>
-                </when>
-                <when>
-                    <xpath>/person/city = 'Wien'</xpath>
-                    <log message="Wien message"/>
-                    <to uri="file:target/messages/at"/>
-                </when>
-                <otherwise>
-                    <log message="Other message"/>
-                    <to uri="file:target/messages/others"/>
-                </otherwise>
-            </choice>
-        </route>
-    </camelContext>
+    <route>
+      <from uri="file:src/data"/>
+      <choice>
+        <when>
+          <xpath>/person/city = 'London'</xpath>
+          <log message="UK message"/>
+          <to uri="file:target/messages/uk"/>
+        </when>
+        <when>
+          <xpath>/person/city = 'Wien'</xpath>
+          <log message="Vienna message"/>
+          <to uri="file:target/messages/at"/>
+        </when>
+        <otherwise>
+          <log message="Other message"/>
+          <to uri="file:target/messages/others"/>
+        </otherwise>
+      </choice>
+    </route>
+  </camelContext>
+  
+  <!-- Start an embedded artemis server, configured with broker.xml -->
+  <bean id="ActiveMQBroker" class="org.apache.activemq.artemis.core.server.embedded.EmbeddedActiveMQ"
+   init-method="start" destroy-method="stop">
+  </bean>
+
+  <!-- lets configure the default ActiveMQ broker URL -->
+  <bean id="jms" class="org.apache.camel.component.jms.JmsComponent" depends-on="ActiveMQBroker">
+    <property name="connectionFactory">
+       <bean class="org.apache.activemq.artemis.jms.client.ActiveMQJMSConnectionFactory">
+        <constructor-arg value="tcp://localhost:61616"/>
+      </bean>
+    </property>
+  </bean>
+
 </beans>

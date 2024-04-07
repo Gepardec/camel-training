@@ -5,34 +5,26 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 
-import org.apache.camel.EndpointInject;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.test.spring.junit5.CamelSpringTestSupport;
+import org.apache.camel.test.junit5.CamelTestSupport;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import at.gepardec.trainings.camel.MyRouteBuilder;
 
 
-public class SimpleTest extends CamelSpringTestSupport {
-
-    @Produce("direct:start")
-    private ProducerTemplate template;
-
-    @EndpointInject("mock:result")
-    private MockEndpoint resultEndpoint;
+public class SimpleTest2 extends CamelTestSupport {
 
 
+	
     @Test
-    public void test_simple_with_body() throws InterruptedException, Exception {
-
+    public void test_simple_with_body_no_inject() throws InterruptedException {
         String msgIn = readResourceFileToString("wienMessage.xml");
         String msgExpected = msgIn;
 
+        MockEndpoint resultEndpoint = resolveMandatoryEndpoint("mock:result", MockEndpoint.class);
         resultEndpoint.expectedMessageCount(1);
         resultEndpoint.expectedBodiesReceived(msgExpected);
 
@@ -44,21 +36,19 @@ public class SimpleTest extends CamelSpringTestSupport {
     @Override
     protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
-            public void configure() {
+            public void configure() throws Exception {
+            	
+            	context().addRoutes(new MyRouteBuilder());
+ 
                 from("direct:start")
                 .log("Got message: ${body}")
-                .to("file:target/messages/others");
+               .to("file:target/messages/others");
                 
                 from("file:target/messages/somewhere?noop=true")
-                .to(resultEndpoint);
+                .to("mock:result");
             }
         };
     }
-
-	@Override
-	protected AbstractApplicationContext createApplicationContext() {
-		return new ClassPathXmlApplicationContext("META-INF/spring/camel-context.xml");
-	}
 	
 	@BeforeEach
     public void cleanMessages() throws Exception {
@@ -74,7 +64,7 @@ public class SimpleTest extends CamelSpringTestSupport {
 		}
 	}
 	
-	public String readResourceFileToString( String path) throws IOException {
+	public String readResourceFileToString( String path){
 		 try {
 			return new String(Files.readAllBytes(readResourceFile(path).toPath()));
 		} catch (IOException e) {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+   <core xmlns="urn:activemq:core">
+
+     <persistence-enabled>false</persistence-enabled>
+	 <security-enabled>false</security-enabled>
+      <acceptors>
+         <acceptor name="netty">tcp://0.0.0.0:61616</acceptor>
+      </acceptors>
+   </core>
+</configuration>

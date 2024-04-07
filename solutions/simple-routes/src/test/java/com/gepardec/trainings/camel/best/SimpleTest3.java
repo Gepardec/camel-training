@@ -18,7 +18,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
-public class SimpleTest extends CamelSpringTestSupport {
+public class SimpleTest3 extends CamelSpringTestSupport {
 
     @Produce("direct:start")
     private ProducerTemplate template;
@@ -47,10 +47,11 @@ public class SimpleTest extends CamelSpringTestSupport {
             public void configure() {
                 from("direct:start")
                 .log("Got message: ${body}")
-                .to("file:target/messages/others");
+                .to("file:src/data");
                 
-                from("file:target/messages/somewhere?noop=true")
+                from("file:target/messages/wien?noop=true")
                 .to(resultEndpoint);
+                
             }
         };
     }
