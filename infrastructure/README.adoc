@@ -1,0 +1,65 @@
+# Schulungsumgebung in AWS
+
+Wir bauen X Schulungsumgebungen in AWS auf.
+
+Es wird terraform verwendet um eine isolierte Umgebung zu erstellen.
+
+Danach wird ansible verwendet um die VMs für das Training einzurichten.
+
+## Terraform
+
+Für den Aufbau der Schulungsumgebung gibt es ein eigenes https://github.com/Gepardec/train[Git Repository] und https://github.com/Gepardec/train/pkgs/container/train[Images] welches Terraform verwendet.
+https://gepardec.github.io/train/[Github Pages] liefert die Dokumentation.
+
+Zum Aktualisieren neuer AMIs siehe auch https://github.com/Gepardec/TroubleshootingWorkshop/tree/master/Schulungsumgebung
+
+
+### Erstellen der AWS Rechner
+```
+vi variables.tfvars
+docker run --rm -it -v $HOME/.aws:/root/.aws:ro -v $(pwd)/:/opt/train/workdir ghcr.io/gepardec/train:latest apply
+```
+
+### Destroy AWS Rechner
+```
+docker run --rm -it -v $HOME/.aws:/root/.aws:ro -v $(pwd)/:/opt/train/workdir ghcr.io/gepardec/train:latest destroy
+```
+
+## Konfigurieren der Rechner mit Ansible
+
+Diebenötigten Collections können mit ansible-galaxy installiert werden:
+```
+ansible-galaxy collection install -r requirements.yml
+```
+alternativ: `bin/run-ansible.sh <docker|podman> dependencies`
+
+In das `inventory` muss dann noch folgendes ergänzt werden:
+
+```
+[all:vars]
+webtop_password=xxx
+```
+Danach kann das ansible-playbook ausgeführt werden.
+```
+ansible-playbook -i camel-training/inventory playbook.yaml
+```
+wobei statt `camel-training` der in `variables.tfvars` angegebene Wert für `resource_prefix` einzusetzen ist.
+alternativ: `../bin/run-ansible.sh <docker|podman>`
+
+## Verbinden mit Webtop
+
+Auf Port 3000 jedes Rechners läuft ein Web-GUI z.B: http://3.68.193.54:3000/. Siehe Datei `inventory` für IP-Adressen
+bzw. das generierte camel-training/readme.txt
+
+## Verbinden mit SSH
+
+Z.B:
+```
+ssh ubuntu@3.71.32.5
+```
+Lokaler Public-Key sollte am Host sein.
+
+SSH von Webtop zum Host:
+```
+ssh localhost
+``` 

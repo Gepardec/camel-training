@@ -1,0 +1,325 @@
+---
+
+## TODO: Firefox auf Desktop legen
+
+- name: Install JBoss Training
+  hosts: all
+#  hosts: host_0
+  gather_facts: no
+  vars:
+      training_home: ../
+      linux_user: ubuntu
+  roles:
+    - role: buluma.eclipse
+    # - role: buluma.eclipse
+    #   eclipse_release: 2022-09
+    #   eclipse_install_path: /opt/eclipse-{{ eclipse_release }}
+    #   eclipse_link_paths:
+    #     - /opt/eclipse-09
+    #     - /opt/eclipse-202209
+  tasks:
+
+    - name: Install Utility Packages
+      become: yes
+      ansible.builtin.apt:
+        update_cache: yes
+        name: "{{ item }}"
+        cache_valid_time: 86400 #One day
+      with_items:
+        - unzip
+        - zip
+        - pip
+        - visualvm
+        - mousepad
+        - openjdk-17-jdk
+        - python3-lxml
+        - python3-docker
+
+    - name: Create directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      with_items:
+        - webtop
+        - bin
+        - CamelTraining
+        - Downloads
+
+    - name: Ensure group "docker" exists
+      become: yes
+      ansible.builtin.group:
+        name: docker
+        state: present
+
+    - name: Add the user to docker group
+      become: yes
+      ansible.builtin.user:
+        name: "{{ linux_user }}"
+        groups: docker
+        append: yes
+
+    - name: Install Docker
+      become: yes
+      community.general.snap:
+        name:
+          - docker
+        state: present
+
+    - name: copy start-script for webtop
+      ansible.builtin.copy:
+        src: "bin/webtop"
+        dest: bin
+        mode: '0755'
+
+    - name: copy start-script for postgres
+      ansible.builtin.copy:
+        src: "bin/postgresql"
+        dest: bin
+        mode: '0755'
+
+    - name: generate SSH key
+      community.crypto.openssh_keypair:
+        path: "~/.ssh/id_rsa"
+        type: rsa
+
+    - name: Allow local user to login
+      ansible.posix.authorized_key:
+        user: "{{ linux_user }}"
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+    - name: Fetch the keyfile from remote server
+      ansible.builtin.fetch: 
+        src: "~/.ssh/id_rsa.pub"
+        dest: "/tmp/remote-{{inventory_hostname}}-id_rsa.pub"
+        flat: yes
+
+    - name: Allow remote user to login remote
+      ansible.posix.authorized_key:
+        user: "{{ linux_user }}"
+        state: present
+        key: "{{ lookup('file','/tmp/remote-{{inventory_hostname}}-id_rsa.pub')}}"
+
+    - name: Copy ssh-config to the webtop directory
+      ansible.builtin.copy:
+        src: .ssh
+        dest: webtop/
+        remote_src: yes
+
+    - name: copy desktop properties
+      ansible.builtin.copy:
+        src: "desktop.properties"
+        dest: webtop/
+        mode: '0644'
+
+    - name: Create ssh config file
+      ansible.builtin.copy:
+        dest: "webtop/.ssh/config"
+        mode: '0600'
+        content: |
+          Host localhost
+            Hostname localhost
+            User "{{ linux_user }}"
+            StrictHostKeyChecking no
+
+# Use ansible.builtin.copy for slow but sure
+    - name: Copy training resources
+      ansible.posix.synchronize:
+        src: "{{training_home}}/{{item}}"
+        dest: CamelTraining
+      with_items:
+        - solutions
+        - exercises
+
+    - name: Git checkout JBoss Setup Scripts
+      ansible.builtin.git:
+        repo: 'https://github.com/Gepardec/JBSS.git'
+        dest: jbss
+
+    - name: Run Webtop wenn fail wegen PermissionError nochmal versuchen
+      community.docker.docker_container:
+        name: webtop
+        image: lscr.io/linuxserver/webtop:alpine-mate
+        state: started
+        timeout: 120
+        env:
+          PUID: "1000"
+          PGID: "1000"
+          TZ: "Europe/Vienna"
+          SUBFOLDER: "/"
+          KEYBOARD: "de-de-qwertz"
+          CUSTOM_USER: jboss
+          PASSWORD: "{{ webtop_password }}"
+        volumes:
+          - /home/{{linux_user}}/webtop:/config
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /:/host
+        security_opts:
+          - "seccomp:unconfined"
+        shm_size: 1G
+        network_mode: host
+
+    - name: Make sure Desktop exists
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      with_items:
+        - webtop/Desktop
+
+    - name: Create desktop shortcut file explorer to home VM via Link
+      ansible.builtin.copy:
+        dest: "webtop/Desktop/home_training.desktop"
+        mode: '0755'
+        content: |
+          [Desktop Entry]
+          Version=1.0
+          Type=Link
+          Name=Home Training
+          Comment=Users Home
+          Icon=user-bookmarks
+          URL=/host/home/{{linux_user}}
+    - name: Create desktop shortcut terminal to VM
+      ansible.builtin.copy:
+        dest: "webtop/Desktop/terminal_vm.desktop"
+        mode: '0755'
+        content: |
+          [Desktop Entry]
+          Version=1.0
+          Type=Application
+          Name=Terminal VM
+          Exec=ssh -Y localhost
+          Icon=utilities-terminal
+          Path=
+          Terminal=true
+          StartupNotify=false
+    - name: Create desktop shortcut JConsole
+      ansible.builtin.copy:
+        dest: "webtop/Desktop/JConsole.desktop"
+        mode: '0755'
+        content: |
+          [Desktop Entry]
+          Version=1.0
+          Type=Application
+          Name=JConsole
+          Comment=Java JConsole 
+          Exec=ssh -Y {{ linux_user }}@localhost /usr/bin/jconsole -J-Dsun.java2d.opengl=true
+          Icon=application-x-java
+          Path=
+          Terminal=false
+          StartupNotify=false
+    - name: Create desktop shortcut JVisualvm
+      ansible.builtin.copy:
+        dest: "webtop/Desktop/JVisualvm.desktop"
+        mode: '0755'
+        content: |
+          [Desktop Entry]
+          Version=1.0
+          Type=Application
+          Name=JVisualvm
+          Comment=Java Visualvm
+          Exec=ssh -Y {{ linux_user }}@localhost /usr/bin/visualvm -J-Dsun.java2d.opengl=true
+          Icon=application-x-java
+          Path=
+          Terminal=false
+          StartupNotify=false
+    - name: Create desktop shortcut Firefox
+      ansible.builtin.copy:
+        dest: "webtop/Desktop/Firefox.desktop"
+        mode: '0755'
+        content: |
+          [Desktop Entry]
+          Version=1.0
+          Type=Application
+          Name=Firefox
+          Comment=Firefox
+          Exec=/usr/bin/firefox
+          Icon=emblem-web
+          Path=
+          Terminal=false
+          StartupNotify=false
+
+    - name: Create desktop shortcut to set desktop properties
+      ansible.builtin.copy:
+        dest: "webtop/Desktop/set_properties.desktop"
+        mode: '0755'
+        content: |
+          [Desktop Entry]
+          Version=1.0
+          Type=Application
+          Name=Set Desktop
+          Exec=bash -c "dconf load / < /config/desktop.properties"
+          Icon=edit-undo
+          Path=
+          Terminal=false
+          StartupNotify=false
+
+    - name: Set default application for pdf
+      ansible.builtin.copy:
+        dest: "webtop/.config/mimeapps.list"
+        mode: '0600'
+        content: |
+          [Added Associations]
+          application/pdf=org.mozilla.firefox.desktop;
+          application/octet-stream=pluma.desktop;
+          application/xml=pluma.desktop;
+          
+          [Default Applications]
+          inode/directory=caja-folder-handler.desktop
+          text/plain=pluma.desktop
+
+    - name: Set some aliases
+      ansible.builtin.copy:
+        dest: ".bash_aliases"
+        mode: '0644'
+        content: |
+          alias edit=mousepad
+
+    - name: Create README
+      ansible.builtin.copy:
+        dest: "webtop/Desktop/README.txt"
+        mode: '0644'
+        content: |
+         Eigenheiten der Umgebung:
+         Der Dektop läuft innerhalb eines Docker Containers in der VM
+
+         Icons:
+            "Home VM": Anzeigen des HOME-Verzeichnisses der VM
+            "Terminal VM": SSH-Verbindung zur VM
+
+         Aliases in der VM (Kommandozeile):
+           edit: Öffnet grafischen Editor Mousepad. Z.B: edit jboss-eap-7.4/version.txt
+
+         Mounts im Container
+           /host innerhalb des Containers zeigt auf / der VM
+           /host/home/{{linux_user}} innerhalb des Containers ist daher das HOME-Verzeichnis des VM-Users
+
+         JDK Environment:
+         export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+         export PATH=./:$JAVA_HOME/bin:$PATH
+
+         Notwendige Optionen bei native Java (jconsole, jvisualvm) Applikationen: -J-Dsun.java2d.opengl=true
+
+    - name: Copy eclipse icon to the webtop directory
+      ansible.builtin.copy:
+        src: /opt/eclipse/icon.xpm
+        dest: webtop/icon_eclipse.xpm
+        remote_src: yes
+
+    - name: Create desktop shortcut Eclipse
+      ansible.builtin.copy:
+        dest: "webtop/Desktop/Eclipse.desktop"
+        mode: '0755'
+        content: |
+          [Desktop Entry]
+          Version=1.0
+          Type=Application
+          Name=Eclipse
+          Comment=Eclipse IDE
+          Exec=ssh -Y {{ linux_user }}@localhost /usr/bin/eclipse
+          Icon=/config/icon_eclipse.xpm
+          Path=
+          Terminal=false
+          StartupNotify=false
+

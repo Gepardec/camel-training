@@ -1,0 +1,29 @@
+#!/bin/sh
+  
+set -x
+
+# Auf der VM ausführen um Webtop (https://github.com/linuxserver/gclient) zu starten
+
+if [ "X$1" = "Xstop" ]; then
+    sudo docker stop webtop
+    sudo docker rm webtop
+    exit
+fi
+
+if [ "X$1" = "Xinfo" ]; then
+    echo Webtop on http://`hostname`:3000
+    sudo docker ps -f name=webtop
+    exit
+fi
+
+
+WEBTOP_HOME=$HOME/webtop
+
+test -d $WEBTOP_HOME || mkdir -p $WEBTOP_HOME
+
+sudo docker run -d   --name=webtop   --security-opt seccomp=unconfined \
+   -e PUID=1000   -e PGID=1000   -e TZ=Europe/Vienna   -e SUBFOLDER=/    -e KEYBOARD=de-de-qwertz \
+   -v $WEBTOP_HOME:/config   -v /var/run/docker.sock:/var/run/docker.sock  \
+   -v /:/host  \
+   --shm-size="1gb" --network host lscr.io/linuxserver/webtop:fedora-xfce
+
