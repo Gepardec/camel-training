@@ -31,4 +31,17 @@ In order to add that route to the camel context, add a <package> element to the 
 ...
 ```
 
-Test the routes manually
+Test the routes manually:
+
+1) Save all messages in a folder `data_orig`
+2) Create a message with content
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<person user="max">
+  <firstName>Max</firstName>
+  <lastName>Frisch</lastName>
+  <city>Wien</city>
+</person>
+```
+
+3) Copy the message to the `target/messages/others` directory an observe that it ends up in `target/messages/somewhere`

@@ -1,9 +1,16 @@
 package com.gepardec.trainings.camel.best;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.Test;
+import org.apache.camel.test.junit5.CamelTestSupport;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 public class SimpleTest extends CamelTestSupport {
@@ -34,4 +41,22 @@ public class SimpleTest extends CamelTestSupport {
             }
         };
     } 
+
+	public File readResourceFile( String path) throws IOException {
+		 ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+		 try {
+			return new File(classloader.getResource(path).toURI());
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public String readResourceFileToString( String path){
+		 try {
+			return new String(Files.readAllBytes(readResourceFile(path).toPath()));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }
