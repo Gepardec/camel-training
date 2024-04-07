@@ -3,6 +3,8 @@ The project for Camel Training
 
 #### Technical hints
 
+On Linux you can test all with solutions/testall.sh
+
 **Compile**
 
 ```

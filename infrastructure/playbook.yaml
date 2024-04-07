@@ -2,15 +2,24 @@
 
 ## TODO: Firefox auf Desktop legen
 
-- name: Install JBoss Training
+- name: Install Camel Training
   hosts: all
 #  hosts: host_0
   gather_facts: no
   vars:
       training_home: ../
       linux_user: ubuntu
+
+  pre_tasks:
+    - name: Update cache
+      become: yes
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 86400 #One day
+
   roles:
     - role: buluma.eclipse
+      become: yes
     # - role: buluma.eclipse
     #   eclipse_release: 2022-09
     #   eclipse_install_path: /opt/eclipse-{{ eclipse_release }}
@@ -322,4 +331,3 @@
           Path=
           Terminal=false
           StartupNotify=false
-

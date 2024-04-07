@@ -64,7 +64,7 @@ cd $BASE_DIR
 
 if [ X$compile = "Xtrue" ]; then 
     echo Compile project
-    cd $BASE_DIR/solutions
+    cd $BASE_DIR
     mvn clean install || { do_cleanup; exit 1; }
 fi
 
@@ -86,12 +86,12 @@ fi
 
 if [ X$migrate_db = "Xtrue" ]; then 
     echo Migrate database
-    cd $BASE_DIR/solutions/commons
+    cd $BASE_DIR/commons
     mvn flyway:migrate || { do_cleanup; exit 4; }
 fi
 
 if [ X$start_camel = "Xtrue" ]; then 
-    cd $BASE_DIR/solutions/best
+    cd $BASE_DIR/best
     mvn quarkus:run &
     CAMEL_PID=$!
     echo Camel running on PID $CAMEL_PID
@@ -107,7 +107,7 @@ fi
 
 if [ X$integrationtests = "Xtrue" ]; then
     echo Start integrationtests
-    cd $BASE_DIR/solutions/best
+    cd $BASE_DIR/best
     mvn -Dmaven.failsafe.skip=false -DskipTests -Dtest.best.port=8080 $TEST verify || { do_cleanup; exit 6; }
 fi
 

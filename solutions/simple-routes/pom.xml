@@ -108,6 +108,10 @@
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0</version>
+      </plugin>
 
 			<!-- allows the route to be ran via 'mvn camel:run' -->
       <plugin>

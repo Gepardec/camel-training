@@ -7,7 +7,7 @@ import org.apache.camel.builder.RouteBuilder;
 public final class MeatOrderRouteBuilder extends RouteBuilder {
 
     public static final String ENTRY_SEDA_ENDOINT_URI = "seda://meat_order_entry";
-    public static final String OUTPUT_FILE_ENDPOINT_URI = "file://tmp.file";
+    public static final String OUTPUT_FILE_ENDPOINT_URI = "file://target/tmp.file";
 
     @Override
     public void configure() {
