@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -x 
+
 compile=true
 start_containers=true
 migrate_db=true
@@ -90,7 +92,7 @@ fi
 
 if [ X$start_camel = "Xtrue" ]; then 
     cd $BASE_DIR/solutions/best
-    mvn camel:run &
+    mvn quarkus:run &
     CAMEL_PID=$!
     echo Camel running on PID $CAMEL_PID
     echo Wait a little
@@ -106,7 +108,7 @@ fi
 if [ X$integrationtests = "Xtrue" ]; then
     echo Start integrationtests
     cd $BASE_DIR/solutions/best
-    mvn -Dmaven.failsafe.skip=false -DskipTests $TEST verify || { do_cleanup; exit 6; }
+    mvn -Dmaven.failsafe.skip=false -DskipTests -Dtest.best.port=8080 $TEST verify || { do_cleanup; exit 6; }
 fi
 
 do_cleanup

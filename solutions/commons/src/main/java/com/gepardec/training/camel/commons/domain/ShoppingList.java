@@ -1,12 +1,9 @@
 package com.gepardec.training.camel.commons.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 public class ShoppingList {
-    private List<ShoppingListItem>  shoppingListItems;
-    @JsonProperty("name")
+    private List<ShoppingListItem> shoppingListItems;
     private String listName;
 
     public ShoppingList(List<ShoppingListItem> shoppingListItems, String listName) {

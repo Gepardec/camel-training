@@ -3,7 +3,11 @@ package com.gepardec.training.camel.commons.domain;
 import java.io.Serializable;
 import java.util.List;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection // Lets Quarkus register this class for reflection during the native build
 public class Order implements Serializable {
+    private static final long serialVersionUID = 1L;
     private long partnerId;
     private List<OrderItem> items;
 

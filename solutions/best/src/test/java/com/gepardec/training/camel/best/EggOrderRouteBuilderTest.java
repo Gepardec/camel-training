@@ -1,62 +1,81 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.commons.domain.OrderItem;
-import com.gepardec.training.camel.commons.domain.OrderToProducer;
-import com.gepardec.training.camel.commons.test.routetest.CamelRouteCDITest;
-import com.gepardec.training.camel.commons.test.routetest.RouteId;
-import com.gepardec.training.camel.commons.test.routetest.MockableEndpoint;
-import org.apache.camel.Exchange;
-import org.apache.camel.cdi.Uri;
+import com.gepardec.training.camel.commons.misc.FileUtils;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
+import jakarta.inject.Inject;
+import org.apache.camel.CamelContext;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.builder.AdviceWith;
+import org.apache.camel.builder.AdviceWithRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.test.cdi.Beans;
-import org.apache.camel.test.cdi.CamelCdiRunner;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.apache.camel.quarkus.test.CamelQuarkusTestSupport;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import javax.inject.Inject;
+@QuarkusTest
+@TestInstance(Lifecycle.PER_CLASS)
+@TestProfile(EggOrderRouteBuilderTest.class)
+public class EggOrderRouteBuilderTest extends CamelQuarkusTestSupport {
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-@RunWith(CamelCdiRunner.class)
-@Beans(classes = EggOrderRouteBuilder.class)
-public class EggOrderRouteBuilderTest extends CamelRouteCDITest {
+    private static final String ORDER_FILE = "json/order_eggs.json";
+    private static final String EGG_ORDER_ITEM = "xml/egg_order_item.xml";
 
     @Inject
-    @Uri("mock:result")
-    @MockableEndpoint(id = EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_ID)
-    @RouteId(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
-    private MockEndpoint result;
+    CamelContext context;
 
-    @Test
-    public void correctInput_messageInQueue() throws InterruptedException {
-        OrderToProducer orderToProducer = new OrderToProducer();
-        orderToProducer.setCode(OrderItem.EGG);
-        orderToProducer.setAmount(2);
-        orderToProducer.setPartnerId(3);
+    @EndpointInject("mock:resultEggOrderRouteBuilderTest")
+    private MockEndpoint resultEndpoint;
 
-        result.expectedMessageCount(1);
-        
-        // Then
-        sendToEndpoint(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI, orderToProducer);
-        result.assertIsSatisfied();
-        final Exchange exchange = result.getExchanges().get(0);
-        assertThat(exchange).isNotNull();
-        assertThat(exchange.getIn().getBody()).isNotNull();
-        assertThat(exchange.getIn().getBody(String.class))
-                .containsIgnoringCase("orderToProducer>")
-                .containsIgnoringCase("amount>2</")
-                .containsIgnoringCase("code>1</")
-                .containsIgnoringCase("partnerId>3</");
-        result.reset();
+    @Override
+    protected RouteBuilder createRouteBuilder() {
+        return new RouteBuilder() {
+            public void configure() throws Exception {
+
+                from("direct:EggOrderRouteBuilderTestRest")
+                        .log("Test message to rest EP: ${body}")
+                        .to("direct:EggOrderRouteBuilderTestFrom");
+
+                from("direct:EggOrderRouteBuilderTestDirectResult")
+                        .convertBodyTo(String.class)
+                        .log("Result EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI: ${body}")
+                        .to(resultEndpoint);
+            }
+        };
+    }
+
+    @BeforeAll
+    public void beforeAll() throws Exception {
+
+        AdviceWith.adviceWith(context, EntryRouteBuilder.ENTRY_REST_ENDOINT_ROUTE_ID,
+                a -> a.replaceFromWith("direct:EggOrderRouteBuilderTestFrom"));
+
+        AdviceWith.adviceWith(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI, context, new AdviceWithRouteBuilder() {
+            @Override
+            public void configure() {
+                weaveByToUri(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI)
+                        .replace()
+                        .to("direct:EggOrderRouteBuilderTestDirectResult");
+            }
+        });
+
     }
 
     @Test
-    public void wrongInput_noMessageToQueue() throws InterruptedException{
-        result.expectedMessageCount(0);
-        // Then
-        sendToEndpoint(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI, "string");
-        result.assertIsSatisfied();
-        result.reset();
+    public void test_rest_egg_order() throws Exception {
+
+        String msgIn = FileUtils.getFileAsString(ORDER_FILE);
+        String msgExpected = FileUtils.getFileAsString(EGG_ORDER_ITEM) + '\n';
+
+        resultEndpoint.expectedMessageCount(1);
+        resultEndpoint.expectedBodiesReceived(msgExpected);
+
+        template()
+                .sendBody("direct:EggOrderRouteBuilderTestRest", msgIn);
+        resultEndpoint.assertIsSatisfied();
     }
 
 }

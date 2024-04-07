@@ -1,62 +1,90 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.best.db.CommonOperations;
-import com.gepardec.training.camel.commons.config.DbConnection;
-import com.gepardec.training.camel.commons.test.integrationtest.CamelIntegrationTest;
-import com.gepardec.training.camel.commons.test.integrationtest.RestServiceTestSupport;
-import com.ninja_squad.dbsetup.DbSetup;
-import com.ninja_squad.dbsetup.destination.DataSourceDestination;
-import com.ninja_squad.dbsetup.operation.Operation;
-import org.assertj.db.type.Table;
-import org.junit.Test;
+import com.gepardec.training.camel.commons.domain.OrderToProducer;
+import com.gepardec.training.camel.commons.misc.FileUtils;
+import io.quarkus.test.junit.QuarkusTest;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.quarkus.test.CamelQuarkusTestSupport;
+import org.junit.jupiter.api.Test;
 
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.sql.SQLException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import static com.ninja_squad.dbsetup.operation.CompositeOperation.sequenceOf;
-import static org.assertj.db.api.Assertions.assertThat;
+@QuarkusTest
+public class PastaOrderRouteBuilderIT extends CamelQuarkusTestSupport {
 
-public class PastaOrderRouteBuilderIT extends CamelIntegrationTest {
+    private static final String PASTA_ORDER_FILE = "json/order_pasta.json";
+    private static final String PASTA_ORDER_ITEM = "json/pasta_order_item.json";
 
-    private static final String MILK_JSON_FILE_PATH = "json/order_milk.json";
-    private static final String PASTA_JSON_FILE_PATH = "json/order_pasta.json";
+    @EndpointInject("mock:resultPastaOrderRouteBuilderTest")
+    private MockEndpoint result;
 
-    @Test
-    public void wrongInputJson_NothingInDB() throws IOException, SQLException {
-        clearDB();
+    @Override
+    protected RouteBuilder createRouteBuilder() {
+        return new RouteBuilder() {
+            public void configure() throws Exception {
 
-        String json = getFileAsString(MILK_JSON_FILE_PATH);
-        RestServiceTestSupport.callPost("", json, 202);
+                from("direct:TestRestEP")
+                        .toV("sql://select count(*) from order_to_producer", null, "global:countBefore")
+                        .log("Test message to rest EP: ${body} countBefore: ${variable.global:countBefore} countAfter: ${variable.global:countAfter}")
+                        .to(EntryRouteBuilderIT.ENTRY_REST_ENDOINT_URI);
 
-        Table table = new Table(DbConnection.getDatasource(), "order_to_producer");
-        assertThat(table).hasNumberOfRows(0);
+                from("direct:TestDirectEP")
+                        .toV("sql://select count(*) from order_to_producer", null, "global:countBefore")
+                        .log("Test message to direct EP: ${body} countBefore: ${variable.global:countBefore} countAfter: ${variable.global:countAfter}")
+                        .unmarshal().json(OrderToProducer.class)
+                        .to(PastaOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
+                        .log("sql://select count(*) from order_to_producer where id=CAST(:#${exchangeProperty.BestDbID} AS uuid)?dataSource=#my_db")
+                        .to("sql://select count(*) from order_to_producer where id=CAST(:#${exchangeProperty.BestDbID} AS uuid)?dataSource=#my_db")
+                        .log("count: ${body}");
+                //           	.to(result);
+
+                from(PastaOrderRouteBuilder.OUTPUT_FILE_ENDPOINT_URI)
+                        .toV("sql://select count(*) from order_to_producer", null, "global:countAfter")
+                        .log("Received message: ${body} countBefore: ${variable.global:countBefore} countAfter: ${variable.global:countAfter}")
+                        .choice()
+                        .when(variable("global:countBefore").isNotEqualTo(variable("global:countAfter")))
+                        .setBody(constant("OK"))
+                        .otherwise()
+                        .setBody(simple(
+                                "Something wrong! Received message: ${body} countBefore: ${variable.global:countBefore} countAfter: ${variable.global:countAfter}"))
+                        .end()
+                        .to(result);
+            }
+        };
     }
 
     @Test
-    public void correctInputJson_CorrectJavaObjectIsCreated() throws IOException, SQLException {
-        clearDB();
+    public void test_seda_ep_sents_to_file() throws Exception {
 
-        String json = getFileAsString(PASTA_JSON_FILE_PATH);
-        RestServiceTestSupport.callPost("", json, 202);
+        String msgIn = FileUtils.getFileAsString(PASTA_ORDER_ITEM);
+        String msgExpected = "OK";
 
-        Table table = new Table(DbConnection.getDatasource(), "order_to_producer");
+        result.expectedMessageCount(1);
+        template().sendBody("direct:TestDirectEP", msgIn);
+        result.assertIsSatisfied();
 
-        assertThat(table).hasNumberOfRows(1)
-                .column("partner_id").value().isEqualTo(1)
-                .column("item_code").value().isEqualTo(2)
-                .column("item_count").value().isEqualTo(120);
+        assertEquals(1, result.getExchanges().size());
+        String content = result.getExchanges().get(0).getIn().getBody(String.class);
+        assertEquals(msgExpected, content);
     }
 
-    private void clearDB() throws IOException, SQLException {
-        Operation operation =
-                sequenceOf(
-                        CommonOperations.DELETE_ALL);
-        DataSource dataSource = DbConnection.getDatasource();
-        DbSetup dbSetup = new DbSetup(new DataSourceDestination(dataSource), operation);
-        dbSetup.launch();
+    @Test
+    public void test_rest_pasta_order() throws Exception {
 
+        String msgIn = FileUtils.getFileAsString(PASTA_ORDER_FILE);
+        String msgExpected = "OK";
+
+        assertNotNull(msgIn);
+        assertNotNull(msgExpected);
+
+        result.expectedMessageCount(1);
+        result.expectedBodiesReceived(msgExpected);
+
+        template().sendBody("direct:TestRestEP", msgIn);
+        result.assertIsSatisfied();
     }
-
 
 }

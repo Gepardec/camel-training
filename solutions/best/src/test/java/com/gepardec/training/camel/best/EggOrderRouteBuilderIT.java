@@ -1,46 +1,74 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.commons.config.ConfigurationProducer;
-import com.gepardec.training.camel.commons.test.integrationtest.CamelIntegrationTest;
-import com.gepardec.training.camel.commons.test.integrationtest.RestServiceTestSupport;
-import org.apache.camel.Exchange;
-import org.junit.Before;
-import org.junit.Test;
+import com.gepardec.training.camel.commons.domain.Order;
+import com.gepardec.training.camel.commons.misc.FileUtils;
+import io.quarkus.test.junit.QuarkusTest;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.quarkus.test.CamelQuarkusTestSupport;
+import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
+@QuarkusTest
+public class EggOrderRouteBuilderIT extends CamelQuarkusTestSupport {
 
-import static org.assertj.core.api.Assertions.assertThat;
+    private static final String ORDER_FILE = "json/order_eggs.json";
+    private static final String ORDER_EXPECTED = "json/first_order_item.json";
+    private static final String EGG_ORDER_ITEM = "xml/egg_order_item.xml";
 
-public class EggOrderRouteBuilderIT extends CamelIntegrationTest {
+    @EndpointInject("mock:resultEntryRouteBuilderTest")
+    private MockEndpoint resultEndpoint;
 
-    private static final String MILK_JSON_FILE_PATH = "json/order_milk.json";
-    private static final String EGGS_JSON_FILE_PATH = "json/order_eggs.json";
+    @Override
+    protected RouteBuilder createRouteBuilder() {
+        return new RouteBuilder() {
+            public void configure() throws Exception {
 
-    @Before
-    public void setup(){
-        camelContext.getRegistry().bind("JMSConnectionFactory", new ConfigurationProducer().createConnectionFactory());
-        clearEndpointQueue(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
+                from("direct:EntryRouteBuilderTestDirect")
+                        .log("Test message: ${body}")
+                        .unmarshal().json(Order.class)
+                        .to(EntryRouteBuilder.ENTRY_DIRECT_ENDOINT_URI);
+
+                from(EntryRouteBuilder.ORDER_ENDOINT_URI)
+                        .log("Received message: ${body}")
+                        .to(resultEndpoint);
+
+                from("direct:EntryRouteBuilderTestRest")
+                        .log("Test message to rest EP: ${body}")
+                        .to(EntryRouteBuilderIT.ENTRY_REST_ENDOINT_URI);
+
+                from(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI)
+                        .convertBodyTo(String.class)
+                        .log("Result EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI: ${body}")
+                        .to(resultEndpoint);
+            }
+        };
     }
 
     @Test
-    public void wrongInputJson_NothingInQueue() throws IOException {
-        String json = getFileAsString(MILK_JSON_FILE_PATH);
-        RestServiceTestSupport.callPost("", json, 202);
-        pollFromEndpoint(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI, 2000);
+    public void test_direct_egg_order() throws Exception {
+        String msgIn = FileUtils.getFileAsString(ORDER_FILE);
+        String msgExpected = FileUtils.getFileAsString(EGG_ORDER_ITEM) + '\n';
+
+        resultEndpoint.expectedMessageCount(1);
+        resultEndpoint.expectedBodiesReceived(msgExpected);
+
+        template().sendBody("direct:EntryRouteBuilderTestDirect", msgIn);
+        resultEndpoint.assertIsSatisfied();
     }
 
     @Test
-    public void correctInputJson_CorrectJavaObjectIsCreated() throws IOException, InterruptedException {
-    	Thread.sleep(1000); // Some Timing problem wit integrationtests
-        String json = getFileAsString(EGGS_JSON_FILE_PATH);
-        RestServiceTestSupport.callPost("", json, 202);
-        Exchange exchange = pollFromEndpoint(EggOrderRouteBuilder.OUTPUT_JMS_ENDPOINT_URI);
-        assertThat(exchange).isNotNull();
-        assertThat(exchange.getIn().getBody()).isNotNull();
-        assertThat(exchange.getIn().getBody(String.class))
-                .containsIgnoringCase("orderToProducer>")
-                .containsIgnoringCase("amount>110</")
-                .containsIgnoringCase("code>1</")
-                .containsIgnoringCase("partnerId>1</");
+    public void test_rest_egg_order() throws Exception {
+
+        String msgIn = FileUtils.getFileAsString(ORDER_FILE);
+        String msgExpected = FileUtils.getFileAsString(EGG_ORDER_ITEM) + '\n';
+
+        resultEndpoint.expectedMessageCount(1);
+        resultEndpoint.expectedBodiesReceived(msgExpected);
+
+        template()
+                .sendBody("direct:EntryRouteBuilderTestRest", msgIn);
+        resultEndpoint.assertIsSatisfied();
     }
+
 }
