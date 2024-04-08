@@ -23,7 +23,7 @@ function train_create_readme_header {
 cat <<EOF >> $readme
 Verbindungsdaten zu den Schulungsrechnern.
 Login für alle Rechner:
-   User: jboss
+   User: camel
    Passwort: ${webtop_password}
 
 user_0 ist für den Trainer reserviert.
