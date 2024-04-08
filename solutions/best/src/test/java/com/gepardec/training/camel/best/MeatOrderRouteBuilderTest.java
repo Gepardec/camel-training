@@ -52,15 +52,14 @@ public class MeatOrderRouteBuilderTest extends CamelQuarkusTestSupport {
 
     @Test
     public void testAmountAbove100_EndopointContainsCorrectMessage() throws InterruptedException {
-        OrderToProducer orderToProducer = new OrderToProducer(new OrderItem(OrderItem.MEAT, 120), 42);
+        OrderToProducer msgIn = new OrderToProducer(new OrderItem(OrderItem.MEAT, 120), 42);
+        String msgExpected = "parentId=42, amount=120, code=4";
 
         result.expectedMessageCount(1);
-        template().sendBody("direct:TestDirectEP", orderToProducer);
+        result.expectedBodiesReceived(msgExpected);
+        
+        template().sendBody("direct:TestDirectEP", msgIn);
         result.assertIsSatisfied();
-
-        assertEquals(1, result.getExchanges().size());
-        String content = result.getExchanges().get(0).getIn().getBody(String.class);
-        assertEquals("parentId=42, amount=120, code=4", content);
     }
 
     @Test
