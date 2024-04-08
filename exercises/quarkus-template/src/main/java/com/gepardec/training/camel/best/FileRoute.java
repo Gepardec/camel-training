@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.acme.first.camel;
+package com.gepardec.training.camel.best;
 
 import org.apache.camel.builder.RouteBuilder;
 
