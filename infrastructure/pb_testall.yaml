@@ -8,11 +8,11 @@
 
   tasks:
 
-    - name: Delete testall.log
-      ansible.builtin.file: 
-        path: testall.log
-        state: absent
-
+#    - name: Delete testall.log
+#      ansible.builtin.file: 
+#        path: testall.log
+#        state: absent
+#
     - name: Run testall.sh if testall.log doesnt exist
       ansible.builtin.shell: CamelTraining/solutions/testall.sh > testall.log; killall java; tail testall.log
       register: testall
