@@ -3,80 +3,66 @@ CDI Unit-Tests with Camel
 
 Prerequisites: Exercise 05
 
-Create a route that takes Order-Files from `src/orders` and sends it to `target/orders/processed`. 
-Test this route with help of a unit test that uses `CamelTestSupport` as base class.
+Create a route that takes files from `target/messages/in` and sends it to `target/messages/in`. 
+Test this route with help of a unit test that uses `CamelQuarkusTestSupport` as base class.
 
-Hints
+Steps
 -----
 
 Add the following dependency to pom.xml:
 
 ```
-   <dependency>
-       <groupId>org.apache.camel</groupId>
-       <artifactId>camel-test-cdi</artifactId>
-       <scope>test</scope>
-   </dependency>
+    <dependency>
+        <groupId>org.apache.camel.quarkus</groupId>
+        <artifactId>camel-quarkus-junit5</artifactId>
+        <scope>test</scope>
+    </dependency>
+
 ```
 
-Copy the route `MyRoutes.java` into your project.
+Copy the route `FileRoute.java` into your project in case you dont already have it.
 
 Add a unit test with the following test and route builder:
 
 ```
-    @Test
-    public void when_order_in_orders_message_is_in_processed() throws InterruptedException {
-        String orderIn = "{\"partnerId\":1,\"items\":[{\"code\":1,\"amount\":110}]}";
-        String orderExpected = "{\"partnerId\":1,\"items\":[{\"code\":1,\"amount\":110}]}";
+@QuarkusTest
+public class FileRouteTest extends CamelQuarkusTestSupport {
 
-        resultEndpoint.expectedMessageCount(1);
-        resultEndpoint.expectedBodiesReceived(orderExpected);
-               
-        template.sendBody("direct:start", orderIn);
-        resultEndpoint.assertIsSatisfied();
-    }
+    @Produce("direct:start")
+    private ProducerTemplate startProducer;
+
+    @EndpointInject("mock:result")
+    private MockEndpoint resultEndpoint;
 
     @Override
     protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
-            public void configure() {
+            public void configure() throws Exception {
+
                 from("direct:start")
-                .log("Send to file order: ${body}")
-                .to(MyRoutes.URL_FILE_ORDERS_IN);
-                               
-                from(MyRoutes.URL_FILE_ORDERS_OUT)
-                .to(resultEndpoint);
-                
+                        .log("Got message: ${body}")
+                        .to("file:target/messages/in");
+
+                from("file:target/messages/out")
+                        .to("mock:result");
             }
         };
-```
+    }
 
-Test the test.
+    @Test
+    public void test_message_goes_from_in_to_out() throws InterruptedException {
+        String msgIn = "Camel";
+        String msgExpected = "Hallo Camel!";
 
-Simplify the test by using Advice and weave:
+        resultEndpoint.expectedMessageCount(1);
+        resultEndpoint.expectedBodiesReceived(msgExpected);
 
-```
-	void advice(@Observes CamelContextStartedEvent event, ModelCamelContext context) throws Exception {
-		AdviceWith.adviceWith(context.getRouteDefinition(MyRoutes.DIRECT_FROM_ROUTE), context, new AdviceWithRouteBuilder() {
-			@Override
-			public void configure() {
-				weaveByToUri(MyRoutes.URL_FILE_ORDERS_OUT).replace().to(resultMock);
-			}
-		});
-	}
+        startProducer.sendBody("direct:start", msgIn);
+        resultEndpoint.assertIsSatisfied();
+    }
 
-	@Test
-	public void when_order_in_orders_message_is_in_processed() throws InterruptedException {
-        String orderIn = "{\"partnerId\":1,\"items\":[{\"code\":1,\"amount\":110}]}";
-        String orderExpected = "{\"partnerId\":1,\"items\":[{\"code\":1,\"amount\":110}]}";
-
-		resultMock.expectedMessageCount(1);
-		resultMock.expectedBodiesReceived(orderExpected);
-
-		template.sendBody(fromEndpoint, orderIn);
-		resultMock.assertIsSatisfied();
-	}
+}
 
 ```
 
-Optional: Try also to replace the from-endpoint ("file:src/orders") from the main route in the test by a direct endpoint.
+Test the test and fix the Bug.
