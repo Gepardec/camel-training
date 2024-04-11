@@ -331,3 +331,39 @@
           Path=
           Terminal=false
           StartupNotify=false
+
+    - name: Install JBang
+      ansible.builtin.shell: curl -Ls https://sh.jbang.dev | bash -s - app setup
+
+    - name: Install Camel in JBang
+      ansible.builtin.shell: /home/ubuntu/.jbang/bin/jbang trust add https://github.com/apache/camel/ && /home/ubuntu/.jbang/bin/jbang app install camel@apache/camel
+
+    - name: Install IntelliJ via snap
+      become: yes
+      community.general.snap:
+        name:
+          - intellij-idea-community
+        state: present
+        classic: true
+
+    - name: Copy IntelliJ icon to the webtop directory
+      ansible.builtin.copy:
+        src: /snap/intellij-idea-community/current/bin/idea.png
+        dest: webtop/IntelliJ.png
+        remote_src: yes
+
+    - name: Create desktop shortcut IntelliJ
+      ansible.builtin.copy:
+        dest: "webtop/Desktop/IntelliJ.desktop"
+        mode: '0755'
+        content: |
+          [Desktop Entry]
+          Version=1.0
+          Type=Application
+          Name=IntelliJ
+          Comment=IntelliJ IDE
+          Exec=ssh -Y {{ linux_user }}@localhost snap run intellij-idea-community
+          Icon=/config/IntelliJ.png
+          Path=
+          Terminal=false
+          StartupNotify=false
