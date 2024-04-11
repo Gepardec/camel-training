@@ -4,4 +4,5 @@ collections:
   - name: ansible.posix
   - name: community.docker
   - name: community.crypto
+roles:
   - name: buluma.eclipse

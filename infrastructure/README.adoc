@@ -27,9 +27,13 @@ docker run --rm -it -v $HOME/.aws:/root/.aws:ro -v $(pwd)/:/opt/train/workdir gh
 
 ## Konfigurieren der Rechner mit Ansible
 
-Diebenötigten Collections können mit ansible-galaxy installiert werden:
+Die benötigten Ansible Dependencies können mit ansible-galaxy installiert werden, einmal die Collections:
 ```
 ansible-galaxy collection install -r requirements.yml
+```
+und einmal die Rollen:
+```
+ansible-galaxy role install -r requirements.yml
 ```
 alternativ: `bin/run-ansible.sh <docker|podman> dependencies`
 
