@@ -1,15 +1,35 @@
 Creating Splitter Route
-================================
+=======================
 
-Prerequisites: Exercise 07
+Prerequisites: Exercise 06.1
 
-Add a route which splits a List of OrderItems.
+Split an order into a list of OrderToProducer items.
 
-Make sure that the route splits only on demand and not upfront.
+Steps
+-----
 
-Send every split part to a seda endpoint, also log the CamelSplitIndex. (hint simple language)
+Insert `SplitterTest.java` into the project.
 
-Write a Test which checks: 
+Create a custom splitter:
+
 ```
-assertThat(result.getReceivedCounter()).hasSize(list.size);
+public class OrderSplitter {
+
+    public static List<OrderToProducer> splitOrder(Order order) {
+        List<OrderToProducer> result = new ArrayList<>();
+        for (OrderItem item : order.getItems()) {
+			result.add(new OrderToProducer(item, order.getPartnerId()));
+		}
+        return result;
+    }
+}
 ```
+
+Integrate the splitter into the test route.
+
+Make sure the tests are green.
+
+Optional:
+
+Log CamelSplitIndex and CamelSplitSize. What changes in the log when you use streaming?
+
