@@ -1,5 +1,7 @@
 package com.gepardec.training.camel.commons.dto;
 
+import java.util.Objects;
+
 public class OrderItemDto {
 
     public static final int EGG = 1;
@@ -35,4 +37,22 @@ public class OrderItemDto {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(amount, code);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OrderItemDto other = (OrderItemDto) obj;
+		return amount == other.amount && code == other.code;
+	}
+
 }
