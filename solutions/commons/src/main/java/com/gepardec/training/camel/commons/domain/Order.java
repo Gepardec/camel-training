@@ -11,7 +11,15 @@ public class Order implements Serializable {
     private long partnerId;
     private List<OrderItem> items;
 
-    public long getPartnerId() {
+    public Order(int partnerId, List<OrderItem> items) {
+		this.partnerId = partnerId;
+		this.items = items;
+	}
+
+	public Order() {
+	}
+
+	public long getPartnerId() {
         return partnerId;
     }
 
