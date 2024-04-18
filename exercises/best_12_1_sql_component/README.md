@@ -3,7 +3,7 @@ SQL Component
 
 Prerequisites: Exercise 06.1
 
-Implement a route builder with SQL endpoint that saves OrderToProducer in the corresponsing database table.
+Configure a SQL component to be used with a Postgres database
 
 Steps
 -----
