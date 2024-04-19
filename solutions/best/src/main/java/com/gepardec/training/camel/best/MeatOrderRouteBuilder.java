@@ -18,7 +18,7 @@ public final class MeatOrderRouteBuilder extends RouteBuilder {
 
         from(ENTRY_SEDA_ENDOINT_URI)
                 .routeId(ENTRY_SEDA_ENDOINT_URI)
-                .validate(exchange -> exchange.getIn().getBody(OrderToProducer.class).getAmount() >= 100)
+                .filter(exchange -> exchange.getIn().getBody(OrderToProducer.class).getAmount() >= 100)
                 .process(exchange -> {
                     OrderToProducer orderToProducer = exchange.getIn().getBody(OrderToProducer.class);
                     StringBuilder builder = new StringBuilder();
