@@ -53,6 +53,7 @@
         - webtop
         - bin
         - CamelTraining
+        - CamelTraining/work
         - Downloads
 
     - name: Ensure group "docker" exists
@@ -140,6 +141,7 @@
       with_items:
         - solutions
         - exercises
+        - slides
 
     - name: Git checkout JBoss Setup Scripts
       ansible.builtin.git:
