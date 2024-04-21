@@ -86,3 +86,8 @@ The result should be:
 ```
 
 In `target/messages/order` should be files
+
+Alternatively you may invoke curl with a file:
+```
+curl -v -X POST --header "Content-Type: application/json" http://localhost:8080/best --data-binary @solutions/commons/src/main/resources/files/json/order.json
+```
