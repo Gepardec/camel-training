@@ -22,8 +22,8 @@ Add `@TestInstance(Lifecycle.PER_CLASS)` and `@TestProfile` annotations to the t
 
 Add a `routeId(...)` to the File route
 
-In a `@BeforeAll` method create an advice and replace the from endpoint with "direct:FileRouteTestFrom".
-Also replace the to-endpoint with "direct:FileRouteTestTo".
+In a `@BeforeAll` method create an advice and replace the from endpoint with "direct:FileRouteTestFrom" (use `replaceFromWith()`).
+Also replace the to-endpoint with "direct:FileRouteTestTo" (use `weaveByToUri()`).
 
 Hint: you may just use the variable `context` from `CamelQuarkusTestSupport` as CamelContext.
 
