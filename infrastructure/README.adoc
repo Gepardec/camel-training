@@ -52,7 +52,7 @@ alternativ: `../bin/run-ansible.sh <docker|podman>`
 
 Wenn man das "m5ad.large" image verwendet, starte
 ```
-ansible-playbook -i camel_training/inventory pb_mount_large.yaml playbook.yaml 
+ansible-playbook -i camel_training/inventory pb_mount_large.yaml playbook.yaml pb_testall.yaml
 ```
 
 ## Verbinden mit Webtop

@@ -143,13 +143,8 @@
         - exercises
         - slides
 
-    - name: Start a container with sleep 3 for testing wenn fail wegen PermissionError nochmal versuchen
-      community.docker.docker_container:
-        name: sleepy
-        image: alpine
-        command: ["sleep", "3"]
-
     - name: Run Webtop wenn fail wegen PermissionError nochmal versuchen
+      become: yes
       community.docker.docker_container:
         name: webtop
         image: lscr.io/linuxserver/webtop:alpine-mate
