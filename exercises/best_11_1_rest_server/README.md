@@ -8,6 +8,7 @@ Steps
 
 Add the following dependencies to the `pom.xml`:
 For REST:
+
 ```
 	<dependency>
 		<groupId>org.apache.camel.quarkus</groupId>
@@ -18,7 +19,9 @@ For REST:
 		<artifactId>jakarta.ws.rs-api</artifactId>
 	</dependency>
 ```
+
 and (if not present) for `seda` and `direct` entpoints
+
 ```
 	<dependency>
 		<groupId>org.apache.camel.quarkus</groupId>
@@ -73,6 +76,7 @@ curl -v --header "Content-Type: application/json" http://localhost:8080/best -d 
 ```
 
 The result should be:
+
 ```
 ...
 < HTTP/1.1 202 Accepted
@@ -88,6 +92,7 @@ The result should be:
 In `target/messages/order` should be files
 
 Alternatively you may invoke curl with a file:
+
 ```
 curl -v -X POST --header "Content-Type: application/json" http://localhost:8080/best --data-binary @solutions/commons/src/main/resources/files/json/order.json
 ```

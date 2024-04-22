@@ -43,6 +43,7 @@
         - openjdk-17-jdk
         - python3-lxml
         - python3-docker
+        - libwebkit2gtk-4.0-37
 
     - name: Create directories
       ansible.builtin.file:

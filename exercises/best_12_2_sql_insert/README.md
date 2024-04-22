@@ -20,12 +20,14 @@ Create a direct endpoint as input that accepts `OrderToProducer` message bodies.
 Forward messages to a SQL component that inserts the order into the table `order_to_producer`.
 
 Hint: You can register a generator for the uuid by:
+
 ```
     @Named
     public IdGenerator uuidGen() {
     	return new IdGenerator();
     }
 ```
+
 and reference it in simple-language by: `${bean:uuidGen.nextId}`
 
 Write a test for the route and get it green.

@@ -10,17 +10,20 @@ Steps
 
 
 Start a Postgres instance as docker container
+
 ```
 docker run -d --rm -p 5432:5432 -e POSTGRES_DB=camel -e POSTGRES_USER=camel -e POSTGRES_PASSWORD=camel postgres
 ```
 
 Create the tables
+
 ```
 cd ./solutions/commons
 mvn flyway:migrate
 ```
 
 Insert dependencies for the SQL-Component and jdbc drivers:
+
 ```
 	<dependency>
 	    <groupId>org.apache.camel.quarkus</groupId>
@@ -37,6 +40,7 @@ Insert dependencies for the SQL-Component and jdbc drivers:
 ```
 
 Configure the datasource:
+
 ```
 quarkus.datasource.my_db.db-kind=postgresql
 quarkus.datasource.my_db.username=camel
@@ -51,6 +55,7 @@ Optional
 -------
 
 Write a SqlComponent, such that the following URI cab be used:
+
 ```
 "mypgsql://delete from order_to_producer"
 ```

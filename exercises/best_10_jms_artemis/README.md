@@ -25,6 +25,7 @@ Add the Maven dependency to dependencyManagement section:
 ```
 
 Add the following dependencies to the dependencies section:
+
 ```
 	<dependency>
 	    <groupId>org.apache.camel.quarkus</groupId>
@@ -49,6 +50,7 @@ quarkus.artemis.mybroker.password=camel
 ```
 
 and
+
 ```
     @Named("jms")
     public JmsComponent jms(@Identifier("mybroker") ConnectionFactory connectionFactory) {

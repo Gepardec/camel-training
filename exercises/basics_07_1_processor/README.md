@@ -60,4 +60,4 @@ public class ProcessorTest extends CamelQuarkusTestSupport {
 }
 ```
 
-How does a Exchange look like?
+How does an Exchange look like?

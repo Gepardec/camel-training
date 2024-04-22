@@ -11,6 +11,7 @@ Add ActiveMQ and Camel-ActiveMQ libraries to the projects pom.xml:
      </properties>
 ```
 and dependencies:
+
 ```
 		<dependency>
 			<groupId>org.apache.camel</groupId>
@@ -65,7 +66,7 @@ Add the following routes:
 Test the application.
    * What does the application do?
    * How many messages end up in target/messages/wien ?
-   * Can you change the "activemq" in 'from("activemq:wien")' to "jms" and make the application run?
+   * Can you change the `activemq` in `from("activemq:wien")`  to `jms` and make the application run?
 
 
 

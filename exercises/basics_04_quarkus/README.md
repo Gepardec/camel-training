@@ -4,19 +4,20 @@ My first Camel-Quarkus route
 Prerequisites: Maven, Java
 
 Run
+
 ```
 mvn io.quarkus:quarkus-maven-plugin:3.8.3:create \
     -DprojectGroupId=at.gepardec.camel.quarkus \
     -DprojectArtifactId=best \
     -Dextensions=camel-quarkus-log,camel-quarkus-core,camel-quarkus-file
-``` 
+```
 Then run
 
-``` 
+```
 cd best
 mvn install
 mvn quarkus:dev
-``` 
+```
 Stop Quarkus in dev-mode, then build and run the quarkus app in non-dev mode.
 
 Import the project into the IDE and add the following RouteBuilder:

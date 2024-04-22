@@ -28,7 +28,8 @@ Register the camel.xml in application.properties (camel.main.routes-include-patt
 
 Test the application
 
-What does the 
+What does the
+
 ```
 		<setBody>
 			<simple>"${body} add from bean: ${bean:messageString}!</simple>
