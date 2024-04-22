@@ -143,17 +143,18 @@
         - exercises
         - slides
 
-    - name: Git checkout JBoss Setup Scripts
-      ansible.builtin.git:
-        repo: 'https://github.com/Gepardec/JBSS.git'
-        dest: jbss
+    - name: Start a container with sleep 3 for testing wenn fail wegen PermissionError nochmal versuchen
+      community.docker.docker_container:
+        name: sleepy
+        image: alpine
+        command: ["sleep", "3"]
 
     - name: Run Webtop wenn fail wegen PermissionError nochmal versuchen
       community.docker.docker_container:
         name: webtop
         image: lscr.io/linuxserver/webtop:alpine-mate
         state: started
-        timeout: 120
+        timeout: 220
         env:
           PUID: "1000"
           PGID: "1000"

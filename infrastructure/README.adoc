@@ -50,6 +50,11 @@ ansible-playbook -i camel_training/inventory playbook.yaml
 wobei statt `camel_training` der in `variables.tfvars` angegebene Wert für `resource_prefix` einzusetzen ist.
 alternativ: `../bin/run-ansible.sh <docker|podman>`
 
+Wenn man das "m5ad.large" image verwendet, starte
+```
+ansible-playbook -i camel_training/inventory pb_mount_large.yaml playbook.yaml 
+```
+
 ## Verbinden mit Webtop
 
 Auf Port 3000 jedes Rechners läuft ein Web-GUI z.B: http://3.68.193.54:3000/. Siehe Datei `inventory` für IP-Adressen
@@ -67,3 +72,8 @@ SSH von Webtop zum Host:
 ```
 ssh localhost
 ``` 
+
+## Reboot instance:
+```
+aws ec2 reboot-instances --instance-ids i-0b5adcb4be1680354
+```

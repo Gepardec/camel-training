@@ -42,6 +42,7 @@ public class PastaOrderRouteBuilderIT extends CamelQuarkusTestSupport {
                 //           	.to(result);
 
                 from(PastaOrderRouteBuilder.OUTPUT_FILE_ENDPOINT_URI)
+                		.process(ex -> Thread.sleep(2000))
                         .toV("sql://select count(*) from order_to_producer", null, "global:countAfter")
                         .log("Received message: ${body} countBefore: ${variable.global:countBefore} countAfter: ${variable.global:countAfter}")
                         .choice()
