@@ -4,21 +4,23 @@ My first Camel route
 Prerequisites: Maven, Java
 
 Run
-``` 
+
+```
 mvn archetype:generate \
   -DarchetypeGroupId=org.apache.camel.archetypes \
   -DarchetypeArtifactId=camel-archetype-spring \
   -DarchetypeVersion=4.4.0 \
   -DgroupId=at.gepardec.trainings.camel \
   -DartifactId=simple-routes
-``` 
+```
+
 Then run
 
-``` 
+```
 cd simple-routes/
 mvn install
 mvn camel:run
-``` 
+```
 
 What happened?
 

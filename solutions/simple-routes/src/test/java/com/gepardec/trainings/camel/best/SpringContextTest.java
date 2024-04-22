@@ -18,7 +18,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
-public class SimpleTest3 extends CamelSpringTestSupport {
+public class SpringContextTest extends CamelSpringTestSupport {
 
     @Produce("direct:start")
     private ProducerTemplate template;
