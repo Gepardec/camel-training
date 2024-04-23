@@ -8,13 +8,13 @@ Run
 ```
 mvn io.quarkus:quarkus-maven-plugin:3.8.3:create \
     -DprojectGroupId=at.gepardec.camel.quarkus \
-    -DprojectArtifactId=best \
+    -DprojectArtifactId=best-1 \
     -Dextensions=camel-quarkus-log,camel-quarkus-core,camel-quarkus-file
 ```
 Then run
 
 ```
-cd best
+cd best-1
 mvn install
 mvn quarkus:dev
 ```
@@ -44,4 +44,14 @@ public class FileRoute extends RouteBuilder {
 ```
 
 What does the route do?
-Test the route by copying a file to the in-folder.
+
+Start Quarkus in dev-mode (within your IDE).
+Then test the route by copying a file to the in-folder.
+
+Optional: Change the route e.g. by adding
+
+```
+.log("The body is ${body}")
+```
+
+to the route.
