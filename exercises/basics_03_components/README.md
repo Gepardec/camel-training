@@ -51,22 +51,12 @@ Put broker and client beans into camel-context.xml:
 
 Copy broker.xml into the resources folder and fix the broker-url.
 
-Add the following routes:
+Import the test `JmsTest.java` into the application and make sure it is green.
 
-```
-        from("file:target/messages/at?noop=true")
-        .to("activemq:wien");       
- 
-        from("activemq:wien")
-        .to("log:read-wien")
-        .to("file:target/messages/wien");       
+Optional:
+--------
 
-```
-
-Test the application.
-   * What does the application do?
-   * How many messages end up in target/messages/wien ?
-   * Can you change the `activemq` in `from("activemq:wien")`  to `jms` and make the application run?
+Change the `activemq` in `from("activemq:wien")`  to `jms` and make the application run?
 
 
 

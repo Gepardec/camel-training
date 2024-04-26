@@ -11,8 +11,6 @@
 
     <modules>
         <module>commons</module>
-        <module>commons-test</module>
-        <module>example</module>
         <module>best</module>
         <module>simple-routes</module>
     </modules>

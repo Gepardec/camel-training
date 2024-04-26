@@ -25,6 +25,17 @@ Copy the route `FileRoute.java` into your project in case you dont already have 
 Add a unit test with the following test and route builder:
 
 ```
+package com.gepardec.training.camel.best;
+
+import io.quarkus.test.junit.QuarkusTest;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.Produce;
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.quarkus.test.CamelQuarkusTestSupport;
+import org.junit.jupiter.api.Test;
+
 @QuarkusTest
 public class FileRouteTest extends CamelQuarkusTestSupport {
 
@@ -40,8 +51,7 @@ public class FileRouteTest extends CamelQuarkusTestSupport {
             public void configure() throws Exception {
 
                 from("direct:start")
-                        .log("Got message: ${body}")
-                        .to("file:target/messages/in");
+                      // TODO: Complete the route
 
                 from("file:target/messages/out")
                         .to("mock:result");
@@ -65,4 +75,4 @@ public class FileRouteTest extends CamelQuarkusTestSupport {
 
 ```
 
-Test the test and fix the Bug.
+Complete the route in the test, execute the test and fix the bug.
