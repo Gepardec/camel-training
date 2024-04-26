@@ -1,0 +1,20 @@
+#!/bin/sh
+  
+set -x
+
+CONTAINER_NAME=postgresql
+
+# Starten (oder Stoppen) von Postgresql in einem Docker Container
+
+if [ "X$1" = "Xstop" ]; then
+    sudo docker stop $CONTAINER_NAME
+    exit
+fi
+
+# if [ "X$1" = "Xinfo" ]; then
+#     echo Webtop on http://`hostname`:3000
+#     sudo docker ps -f name=webtop
+#     exit
+# fi
+
+docker run --name=$CONTAINER_NAME -it --rm -d -p 5432:5432 -e POSTGRES_DB=postgres -e POSTGRES_USER=SCHUL1 -e POSTGRES_PASSWORD=schul postgres

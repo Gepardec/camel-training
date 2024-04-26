@@ -3,9 +3,6 @@ package com.gepardec.training.camel.best;
 import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
 import org.apache.camel.builder.RouteBuilder;
 
-import javax.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
 public final class MilkOrderRouteBuilder extends RouteBuilder {
 
     public static final String ENTRY_SEDA_ENDOINT_URI = "seda://milk_order_entry";

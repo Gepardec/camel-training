@@ -2,9 +2,16 @@
 # Created by https://www.gitignore.io/api/git,eclipse,netbeans,intellij,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=git,eclipse,netbeans,intellij,visualstudiocode
 
+#Exclude Ansible stuff.
+infrastructure/collections/
+infrastructure/.ansible/
+infrastructure/artifacts/
+infrastructure/inventory/
+infrastructure/project/
+infrastructure/camel_training/
+
 ### Eclipse ###
 .metadata
-bin/
 tmp/
 *.tmp
 *.bak

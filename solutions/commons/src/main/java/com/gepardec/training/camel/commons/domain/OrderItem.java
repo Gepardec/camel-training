@@ -10,12 +10,12 @@ public class OrderItem {
     private long code;
     private int amount;
 
-    public OrderItem(){
+    public OrderItem() {
         code = 0L;
         amount = 0;
     }
 
-    public OrderItem(long code, int amount){
+    public OrderItem(long code, int amount) {
         this.code = code;
         this.amount = amount;
     }

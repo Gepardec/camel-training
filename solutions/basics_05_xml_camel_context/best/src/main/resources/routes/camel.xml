@@ -1,0 +1,19 @@
+<camel>
+
+	<bean name="messageString"
+		type="com.gepardec.training.camel.best.Hello">
+		<constructors>
+			<constructor index="0" value="Franz" />
+		</constructors>
+	</bean>
+
+	<route id="xml-route">
+		<from uri="file:target/messages/out" />
+		<setBody>
+			<simple>"${body} add from bean: ${bean:messageString}!</simple>
+		</setBody>
+
+		<to uri="file:target/messages/next" />
+	</route>
+
+</camel>

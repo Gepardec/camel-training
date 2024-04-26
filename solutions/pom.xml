@@ -11,19 +11,21 @@
 
     <modules>
         <module>commons</module>
-        <module>commons-test</module>
-        <module>example</module>
         <module>best</module>
-        <module>simple-cdi</module>
         <module>simple-routes</module>
-        <module>playground-best</module>
     </modules>
 
     <properties>
+ 		<quarkus.platform.version>3.8.1</quarkus.platform.version>
+		<camel-quarkus.platform.version>${quarkus.platform.version}</camel-quarkus.platform.version>
+
+		<quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+
         <!-- Build Properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
         <downloadSources>true</downloadSources>
         <maven.failsafe.skip>true</maven.failsafe.skip>
 

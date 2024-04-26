@@ -1,70 +1,43 @@
 package com.gepardec.training.camel.best;
 
 import com.gepardec.training.camel.commons.domain.OrderItem;
-import com.gepardec.training.camel.commons.processor.ExceptionLoggingProcessor;
-import org.apache.camel.Endpoint;
 import org.apache.camel.Predicate;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.cdi.Uri;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-@ApplicationScoped
 public final class SplitterRouteBuilder extends RouteBuilder {
 
     public static final String SPLITTER_FROM_ENDOINT_URI = "seda://best_splitter_from";
     public static final String CHOICE_FROM_ENDOINT_URI = "direct://best_choice_from";
 
-    @Inject
-    @Uri(CHOICE_FROM_ENDOINT_URI)
-    Endpoint choiceEndpoint;
-
-    @Inject
-    @Uri(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
-    Endpoint eggEndpoint;
-
-    @Inject
-    @Uri(MeatOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
-    Endpoint meatEndpoint;
-
-    @Inject
-    @Uri(PastaOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
-    Endpoint pastaEndpoint;
-
-    @Inject
-    @Uri(MilkOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
-    Endpoint milkEndpoint;
-
     @Override
     public void configure() {
-        onException(Exception.class)
-                .process(new ExceptionLoggingProcessor())
-                .handled(true);
 
         //@formatter:off
 
         from(SPLITTER_FROM_ENDOINT_URI).routeId(SPLITTER_FROM_ENDOINT_URI)
                 .split().method(OrderSplitter.class)
-                    .log(simple("${header.CamelSplitIndex}").toString())
-                    .to(choiceEndpoint)
+                .log("CamelSplitIndex/CamelSplitSize: ${header.CamelSplitIndex}/${header.CamelSplitSize}") 
+                .to(CHOICE_FROM_ENDOINT_URI) // Todo Streaming???
                 .end();
 
-        from(choiceEndpoint).routeId(CHOICE_FROM_ENDOINT_URI)
+        from(CHOICE_FROM_ENDOINT_URI).routeId(CHOICE_FROM_ENDOINT_URI)
                 .choice()
-                    .when(hasItemCode(OrderItem.EGG))
-                        .to(eggEndpoint)
-                    .when(hasItemCode(OrderItem.PASTA))
-                        .to(pastaEndpoint)
-                    .when(hasItemCode(OrderItem.MILK))
-                        .to(milkEndpoint)
-                    .when(hasItemCode(OrderItem.MEAT))
-                        .to(meatEndpoint)
+                .when(hasItemCode(OrderItem.EGG))
+                .log("Got egg")
+                .to(EggOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
+                .when(hasItemCode(OrderItem.MEAT))
+                .log("Got meat")
+                .to(MeatOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
+                .when(hasItemCode(OrderItem.MILK))
+                .log("Got milk")
+                .to(MilkOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
+                .when(hasItemCode(OrderItem.PASTA))
+                .log("Got pasta")
+                .to(PastaOrderRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
                 .otherwise()
-                    .log("ERROR...")
+                .log("ERROR...")
                 .end();
         //@formatter:on
-
 
     }
 

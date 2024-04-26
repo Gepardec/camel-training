@@ -1,0 +1,20 @@
+---
+- name: Mount home on instance m5ad.large
+  hosts: all
+  become: true
+  gather_facts: no
+  vars:
+      linux_user: ubuntu
+
+# fstab Eintrag:/dev/nvme1n1   /home   ext4   defaults   0   2
+  tasks:
+    - name: Mount /home to a larger volume on large instances
+      ansible.builtin.shell: |
+          mkfs.ext4 /dev/nvme1n1
+          mount -t ext4 /dev/nvme1n1 /mnt
+          mv /home/ubuntu /mnt
+          umount /mnt && mount -t ext4 /dev/nvme1n1 /home
+      args:
+        creates: '/home/lost+found'
+
+

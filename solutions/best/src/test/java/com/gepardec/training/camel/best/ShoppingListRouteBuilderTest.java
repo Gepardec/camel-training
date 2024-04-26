@@ -1,50 +1,34 @@
 package com.gepardec.training.camel.best;
 
-import com.gepardec.training.camel.commons.domain.ShoppingList;
-import com.gepardec.training.camel.commons.domain.ShoppingListItem;
-import com.gepardec.training.camel.commons.test.routetest.MockableEndpoint;
-import com.gepardec.training.camel.commons.test.routetest.RouteId;
-import org.apache.camel.CamelContext;
-import org.apache.camel.Exchange;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.cdi.Uri;
-import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.test.cdi.Beans;
-import org.apache.camel.test.cdi.CamelCdiRunner;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.gepardec.training.camel.commons.domain.ShoppingList;
+import com.gepardec.training.camel.commons.domain.ShoppingListItem;
+import io.quarkus.test.junit.QuarkusTest;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.quarkus.test.CamelQuarkusTestSupport;
+import org.junit.jupiter.api.Test;
 
-@RunWith(CamelCdiRunner.class)
-@Beans(classes = ShoppingListRouteBuilder.class)
-public class ShoppingListRouteBuilderTest {
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    @Inject
-    private CamelContext camelContext;
+@QuarkusTest
+public class ShoppingListRouteBuilderTest extends CamelQuarkusTestSupport {
 
-    @Inject
-    @Uri(ShoppingListRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
+    @EndpointInject(ShoppingListRouteBuilder.ENTRY_SEDA_ENDOINT_URI)
     private ProducerTemplate producerTemplate;
 
-    @Inject
-    @Uri("direct:triggerFileRoute")
+    @EndpointInject("direct:triggerFileRoute")
     private ProducerTemplate producerTemplateTrigger;
 
-
-    @Inject
-    @Uri("mock:shopping_result")
-    @RouteId(ShoppingListRouteBuilder.ROUTE_ID)
-    @MockableEndpoint(id = ShoppingListRouteBuilder.ENTRY_SEDA_ENDOINT_ID_FROM_JSON)
+    @EndpointInject("mock:shopping_result")
     private MockEndpoint shoppingResult;
 
     @Test
@@ -59,28 +43,9 @@ public class ShoppingListRouteBuilderTest {
         ShoppingList shoppingList = new ShoppingList(shoppingListItems, "basics");
 
         producerTemplate.sendBody(shoppingList);
-        String content = new String(Files.readAllBytes(Paths.get("src/test/resources/logs/logfile.txt")));
-        assertThat(content).isNotEmpty();
-        assertThat(content).contains("[{\"code\":2,\"amount\":2},{\"code\":1,\"amount\":10},{\"code\":3,\"amount\":2}");
-    }
-
-    @Ignore
-    @Test
-    public void readFromLogFileTest() throws Exception {
-
-        producerTemplateTrigger.sendBody("test");
-        shoppingResult.expectedMessageCount(1);
-        shoppingResult.expects(() -> {
-            final Exchange exchange = shoppingResult.getExchanges().stream().findFirst().orElse(null);
-
-            Assert.assertNotNull(exchange);
-        });
-
-        // When
-        producerTemplate.start();
-
-        // Then
-        shoppingResult.assertIsSatisfied();
+        String content = new String(Files.readAllBytes(Paths.get("target/logs/logfile.txt")));
+        assertNotNull(content);
+        assertFalse(content.isEmpty());
+        assertTrue(content.contains("[{\"code\":2,\"amount\":2},{\"code\":1,\"amount\":10},{\"code\":3,\"amount\":2}"));
     }
 }
-

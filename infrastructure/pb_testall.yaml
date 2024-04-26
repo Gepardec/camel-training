@@ -1,0 +1,23 @@
+---
+- name: Run Tests on remote machine
+  hosts: all
+  gather_facts: no
+  vars:
+      training_home: ../
+      linux_user: ubuntu
+
+  tasks:
+
+#    - name: Delete testall.log
+#      ansible.builtin.file: 
+#        path: testall.log
+#        state: absent
+#
+    - name: Run testall.sh if testall.log doesnt exist
+      ansible.builtin.shell: CamelTraining/solutions/testall.sh > testall.log; killall java; tail testall.log
+      register: testall
+      args:
+        creates: testall.log
+
+    - name: Result from testall
+      debug: var=testall.stdout_lines
